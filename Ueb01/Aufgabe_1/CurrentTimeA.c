@@ -1,10 +1,10 @@
-#include<stdio.h>
-#include<time.h>
+#include<stdio.h>                                       // Standardbibliothek fuer Ein- und Ausgabe
+#include<time.h>                                        // Bibliothek fuer Zeitfunktionen
 
-int main() {
-    time_t t;                   // Zeit-Struktur
-    time(&t);                   // Systemzeit abrufen
-    printf("Aktuelle Zeit mit time() und ctime():\n");  
-    printf("%s", ctime(&t));    // Zeit in String umwandeln und ausgeben
-    return 0;                   // Programmende
+int main() {                                            // Beginn der Funktion main
+    time_t t;                                           // Datentyp fuer Zeit, dargestellt mit Variable t
+    time(&t);                                           // Ruft aktuelle Zeit auf und speichert sie in Variable t
+    printf("Aktuelle Zeit mit time() und ctime():\n");  // Ausgabe eines Strings
+    printf("%s", ctime(&t));                            // Konvertiert Zeit in String und gibt sie aus, ctime(&t) gibt Pointer auf String zurueck
+    return 0;                                           // Programmende
 }
