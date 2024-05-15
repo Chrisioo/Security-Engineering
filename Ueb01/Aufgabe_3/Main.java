@@ -8,22 +8,22 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Zufall {
+public class Main {
     private static int n = 10000;
 
     public static void main (String[]args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Aktuelle Obergrenze: " + n);
         System.out.print("Soll die Obergrenze geändert werden? (j/n): ");
-        String inputN = scanner.nextLine();
-        if (inputN.equalsIgnoreCase("j")) {
+        String auswahlObergrenze = scanner.nextLine();
+        if (auswahlObergrenze.equalsIgnoreCase("j")) {
             System.out.println("Neue Obergrenze eingeben: ");
-            int newN = scanner.nextInt();
-            n = newN;
+            int neueObergrenze = scanner.nextInt();
+            n = neueObergrenze;
         }
-        System.out.print("1. Generiere Zahlen bis y\n2. Simuliere Kollision\nWähle eine Option: ");
-        int option = scanner.nextInt();
-        if (option == 1) {
+        System.out.print("1. Generiere Zahlen bis y\n2. Simuliere Kollision\nAuswahl: ");
+        int auswahlMenue = scanner.nextInt();
+        if (auswahlMenue == 1) {
             System.out.print("Vorgegebener Wert für y: ");
             int y = scanner.nextInt();
             if (y >= n) {
@@ -31,7 +31,7 @@ public class Zufall {
                 System.exit(0);
             }
             System.out.println(generateGivenNumber(n, y));
-        } else if (option == 2) {
+        } else if (auswahlMenue == 2) {
             System.out.println(simulateCollision(n));
         } else {
             System.out.println("Ungültige Option.");
