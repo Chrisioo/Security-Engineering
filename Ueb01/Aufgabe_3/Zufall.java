@@ -23,7 +23,6 @@ public class Zufall {
         }
         System.out.print("1. Generiere Zahlen bis y\n2. Simuliere Kollision\nWähle eine Option: ");
         int option = scanner.nextInt();
-        scanner.close();
         if (option == 1) {
             System.out.print("Vorgegebener Wert für y: ");
             int y = scanner.nextInt();
@@ -38,6 +37,7 @@ public class Zufall {
             System.out.println("Ungültige Option.");
             System.exit(0);
         }
+        scanner.close();
     }
 
     public static int generateGivenNumber(int n, int y) {
@@ -79,5 +79,4 @@ public class Zufall {
         }
         return generatedNumbers.size(); // Rückgabe der Anzahl der eindeutigen generierten Zahlen
     }
-
 }
