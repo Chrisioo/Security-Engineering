@@ -1,0 +1,7 @@
+Anzahl generierter Zahlen vor Kollision
+    collisions_1.txt: 74
+    collisions_2.txt: 133
+    collisions_3.txt: 97
+    collisions_4.txt: 46
+    collisions_5.txt: 137
+Durschnitt: 97.4
