@@ -21,6 +21,8 @@ public class Main {
             int neueObergrenze = scanner.nextInt();
             n = neueObergrenze;
         }
+        System.out.println("Dateiname: ");
+        String filename = scanner.next();
         System.out.print("1. Generiere Zahlen bis y\n2. Simuliere Kollision\nAuswahl: ");
         int auswahlMenue = scanner.nextInt();
         if (auswahlMenue == 1) {
@@ -30,9 +32,9 @@ public class Main {
                 System.out.println("y muss kleiner als n sein.");
                 System.exit(0);
             }
-            System.out.println(generateGivenNumber(n, y));
+            System.out.println(generateGivenNumber(n, y, filename));
         } else if (auswahlMenue == 2) {
-            System.out.println(simulateCollision(n));
+            System.out.println(simulateCollision(n, filename));
         } else {
             System.out.println("Ungültige Option.");
             System.exit(0);
@@ -40,11 +42,11 @@ public class Main {
         scanner.close();
     }
 
-    public static int generateGivenNumber(int n, int y) {
+    public static int generateGivenNumber(int n, int y, String filename) {
         Random random = new Random();
         int zaehler = 0; // Zähler für die Anzahl der generierten Zahlen
         int randomNumber;
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("zahlen.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename + ".txt"))) {
             do {
                 randomNumber = random.nextInt(n); // Zufällige Zahl zwischen 0 und n-1 generieren
                 System.out.println("Generierte Zahl: " + randomNumber);
@@ -58,15 +60,16 @@ public class Main {
         return zaehler; // Rückgabe der Anzahl generierter Zahlen
     }
 
-    public static int simulateCollision (int n) {
+    public static int simulateCollision (int n, String filename) {
         Random random = new Random();
         Set<Integer> generatedNumbers = new HashSet<>();
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("kollision.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename + ".txt"))) {
             do {
                 int randomNumber = random.nextInt(n); // Zufällige Zahl zwischen 0 und n-1 generieren
                 if (generatedNumbers.contains(randomNumber)) {
                     System.out.println("Kollision bei generierter Zahl: " + randomNumber);
-                    writer.write("Kollision bei: " + String.valueOf(randomNumber)); // Zahl in Datei schreiben
+                    writer.write(String.valueOf(randomNumber)); // Zahl in Datei schreiben
+                    writer.write("\nKollision bei: " + String.valueOf(randomNumber)); // Zahl in Datei schreiben
                     break; // Schleife beenden, wenn die generierte Zahl bereits in der Menge enthalten ist
                 }
                 System.out.println("Generierte Zahl: " + randomNumber);
