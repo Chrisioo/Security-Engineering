@@ -22,7 +22,7 @@ int main () {                                                                   
                                                                                     // %S - Sekunde
                                                                                     // %Y - Vierstellige Jahreszahl
 
-    printf("Aktuelle Zeit mit strftime():\n");
+    printf("Aktuelle Zeit mit time(), gefolgt von localtime() und strftime():\n");
     // Ausgabe des Zeit-Strings
     printf("%s\n", timeString);                                                     // Ausgabe des formatierten Strings            
 
