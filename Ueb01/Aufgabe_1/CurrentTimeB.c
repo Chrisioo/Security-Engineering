@@ -3,7 +3,7 @@
 
 int main () {                                                                       // Beginn der Funktion main
     time_t t;                                                                       // Datentyp fuer Zeit, dargestellt mit Variable t
-    struct tm *localTime;                                                           // Struktur fuer lokale Zeit, Pointer localTime zeigt auf Struktur
+    struct tm *localTime;                                                           // Zeit-Struktur, Pointer localTime zeigt auf Struktur
     char timeString[100];                                                           // String fuer Zeit, 100 Zeichen langes Char-Array
 
     // Systemzeit abrufen
