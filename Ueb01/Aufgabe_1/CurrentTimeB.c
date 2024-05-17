@@ -2,15 +2,13 @@
 #include<time.h>                                                                    // Bibliothek fuer Zeitfunktionen
 
 int main () {                                                                       // Beginn der Funktion main
-    time_t t;                                                                       // Datentyp fuer Zeit, dargestellt mit Variable t
+    time_t zeit;                                                                    // Datentyp fuer Zeit, dargestellt mit Variable zeit
     struct tm *localTime;                                                           // Zeit-Struktur, Pointer localTime zeigt auf Struktur
     char timeString[100];                                                           // String fuer Zeit, 100 Zeichen langes Char-Array
 
-    // Systemzeit abrufen
-    t = time(NULL);                                                                 // Aktuelle Systemzeit, t wird mit aktueller Zeit initialisiert
+    zeit = time(NULL);                                                              // Aktuelle Systemzeit wird abgerufen und in zeit gespeichert
 
-    // Systemzeit in lokale Zeit umwandeln
-    localTime = localtime(&t);                                                      // In Variable t gespeicherte Zeit wird in lokale Zeit umgewandelt und in localTime gespeichert
+    localTime = localtime(&zeit);                                                   // In Variable zeitt gespeicherte Zeit wird in lokale Zeit umgewandelt und in localTime gespeichert
 
     // Zeit in String umwandeln
     strftime(timeString, sizeof(timeString), "%a %b %d %H:%M:%S %Y", localTime);    // strftime() wandelt lokale Zeit in String mit bestimmtem Format um
