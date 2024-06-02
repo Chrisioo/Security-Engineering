@@ -48,7 +48,7 @@ public class Main {
             System.out.println(simulateCollision(n, filename));                                     // Aufruf der Methode simulateCollision mit den Parametern n und filename
         } else {
             System.out.println("Ungültige Option.");                                              // Wenn die Menüauswahl weder 1 noch 2 ist, wird eine Fehlermeldung ausgegeben                      
-            System.exit(0);                                                                  // Programm wird beendet                     
+            System.exit(0);                                                                       // Programm wird beendet                     
         }
         scanner.close();
     }
