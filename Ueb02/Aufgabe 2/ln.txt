@@ -1,0 +1,8 @@
+a) Kurzbeschreibung
+    Erstellt einen Link zwischen zwei Dateien
+b) Installationspfad
+    /usr/bin/ln
+c) Beispiel
+    ln testfile testlink
+d) Entscheidene Systemcalls
+    link, symlink

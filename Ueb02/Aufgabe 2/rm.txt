@@ -1,0 +1,8 @@
+a) Kurzbeschreibung
+    Löscht Dateien, aber standardmäßig keine Directories
+b) Installationspfad
+    /usr/bin/rm
+c) Beispiel
+    rm testfile.*
+d) Entscheidene Systemcalls
+    unlink, rmdir

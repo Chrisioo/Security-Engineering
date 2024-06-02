@@ -1,0 +1,9 @@
+a) Kurzbeschreibung
+    Bewegt Dateien oder Verzeichnisse in ein anderes Verzeichnis oder benennt sie um
+b) Installationspfad 
+    /usr/bin/mv
+c) Beispiel 
+    mv abcd abc - Bennent Datei abcd in abc um
+    mv abcd ./Dropbox - Verschiebt Datei abcd in das Verzeichnis Dropbox
+d) Entscheidene Systemcalls
+    rename

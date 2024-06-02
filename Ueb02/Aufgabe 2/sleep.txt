@@ -1,0 +1,8 @@
+a) Kurzbeschreibung
+    Wartet vor Ausführen des nächsten Befehls für eine bestimmte Zeit
+b) Installationspfad
+    /usr/bin/sleep
+c) Beispiel
+    sleep 5
+d) Entscheidene Systemcalls
+    nanosleep

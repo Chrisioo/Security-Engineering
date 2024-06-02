@@ -1,0 +1,8 @@
+a) Kurzbeschreibung
+    Passt Zugriffsrechte auf Dateien und Verzeichnisse an
+b) Installationspfad
+    usr/bib/chmod
+c) Beispiel
+    chmod 777 datei
+d) Entscheidene Systemcalls 
+    chmod
