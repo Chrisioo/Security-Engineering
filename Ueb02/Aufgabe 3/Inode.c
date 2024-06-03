@@ -55,16 +55,6 @@ void print_file_info(const char *filename) {
 
     // Time of last modification
     printf("Last modification: %s", ctime(&file_stat.st_mtime));
-
-    // Time of file creation (not always available)
-#ifdef __APPLE__
-    printf("Creation time: %s", ctime(&file_stat.st_birthtime));
-#elif defined __linux__
-    struct timespec birthtime = file_stat.st_ctim;
-    printf("Creation time: %s", ctime(&birthtime.tv_sec));
-#else
-    printf("Creation time: Not available on this system\n");
-#endif
 }
 
 int main(int argc, char *argv[]) {
@@ -75,6 +65,7 @@ int main(int argc, char *argv[]) {
 
     for (int i = 1; i < argc; i++) {
         print_file_info(argv[i]);
+        printf("\n");
     }
 
     return 0;
