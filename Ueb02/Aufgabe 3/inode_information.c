@@ -37,46 +37,43 @@ void print_file_info(const char *filename) {                                    
     printf("Group ID: (%d)\n", file_stat.st_gid);                                                                   
 
     // Bestimmen des Namens des Benutzers, der die Datei besitzt
-    struct passwd* user_name = getpwuid(file_stat.st_uid);                                                          // Abrufen der Benutzerinformationen basierend auf der Benutzer-ID
-    if (user_name != NULL)                                                                                          // Überprüfung, ob die Benutzerinformationen abgerufen werden konnten
-        printf("Benutzername: %s\n", user_name->pw_name);                                                           // Ausgabe des Benutzernamens
-
-    // Bestimmen des Namens der Gruppe, die die Datei besitzt
-    struct group* group_name = getgrgid(file_stat.st_gid);                                                          // Abrufen der Gruppeninformationen basierend auf der Gruppen-ID
-    if (group_name != NULL)                                                                                         // Überprüfung, ob die Gruppeninformationen abgerufen werden konnten
-        printf("Gruppenname: %s\n", group_name->gr_name);                                                           // Ausgabe des Gruppennamens
+    struct passwd* user_name = getpwuid(file_stat.st_uid);                                                                  // Abrufen der Benutzerinformationen basierend auf der Benutzer-ID
+    if (user_name != NULL)                                                                                                  // Überprüfung, ob die Benutzerinformationen abgerufen werden konnten
+        printf("Benutzername: %s\n", user_name->pw_name);                                                                   // Ausgabe des Benutzernamens
 
     // Ausgabe der Zugangsberechtigungen im oktalen Format
     printf("Zugangsberechtigungen (oktal): %o\n", file_stat.st_mode & 0777);    
 
     // Ausgabe Zeitpunkt letzter Zugriff auf die Datei
-    struct tm* access_time = localtime(&file_stat.st_atime);                                                        // Umwandeln des Zeitpunkts des letzten Zugriffs in eine lokale Zeitstruktur
-    char access_time_string[20];                                                                                    // Deklaration eines Char-Arrays zur Speicherung der formatierten Zeit
-    strftime(access_time_string, sizeof(access_time_string), "%d.%m.%Y %H:%M:%S", access_time);                     // Formatieren des Zeitpunkts des letzten Zugriffs
-    printf("Letzter Zugriff auf Datei: %s\n", access_time_string);                                                  // Ausgabe des Zeitpunkts des letzten Zugriffs
+    struct tm* access_time = localtime(&file_stat.st_atime);                                                                // Umwandeln des Zeitpunkts des letzten Zugriffs in eine lokale Zeitstruktur
+    char access_time_string[40];                                                                                            // Deklaration eines Char-Arrays zur Speicherung der formatierten Zeit
+    strftime(access_time_string, sizeof(access_time_string), "%a %b %d %H:%M:%S %Z %Y", access_time);                       // Formatieren des Zeitpunkts des letzten Zugriffs
+    printf("Letzter Zugriff auf Datei: %s\n", access_time_string);                                                          // Ausgabe des Zeitpunkts des letzten Zugriffs
 
     // Ausgabe Zeitpunkt letzte Änderung der Inode-Informationen
-    struct tm* change_time = localtime(&file_stat.st_ctime);                                                        // Umwandeln des Zeitpunkts der letzten Änderung der Inode-Informationen in eine lokale Zeitstruktur
-    char change_time_string[20];                                                                                    // Deklaration eines Char-Arrays zur Speicherung der formatierten Zeit
-    strftime(change_time_string, sizeof(change_time_string), "%d.%m.%Y %H:%M:%S", change_time);                     // Formatieren des Zeitpunkts der letzten Änderung der Inode-Informationen
-    printf("Letzte Änderung an Inode-Informationen: %s\n", change_time_string);                                     // Ausgabe des Zeitpunkts der letzten Änderung der Inode-Informationen
+    struct tm* change_time = localtime(&file_stat.st_ctime);                                                                // Umwandeln des Zeitpunkts der letzten Änderung der Inode-Informationen in eine lokale Zeitstruktur
+    char change_time_string[20];                                                                                            // Deklaration eines Char-Arrays zur Speicherung der formatierten Zeit
+    strftime(change_time_string, sizeof(change_time_string), "%a %b %d %H:%M:%S %Z %Y", change_time);                       // Formatieren des Zeitpunkts der letzten Änderung der Inode-Informationen
+    printf("Letzte Änderung an Inode-Informationen: %s\n", change_time_string);                                             // Ausgabe des Zeitpunkts der letzten Änderung der Inode-Informationen
 
     // Ausgabe Zeitpunkt letzte Änderung der Datei
-    struct tm* modification_time = localtime(&file_stat.st_mtime);                                                  // Umwandeln des Zeitpunkts der letzten Änderung der Datei in eine lokale Zeitstruktur
-    char modification_time_string[20];                                                                              // Deklaration eines Char-Arrays zur Speicherung der formatierten Zeit
-    strftime(modification_time_string, sizeof(modification_time_string), "%d.%m.%Y %H:%M:%S", modification_time);   // Formatieren des Zeitpunkts der letzten Änderung der Datei
-    printf("Letzte Veränderung der Datei: %s\n", modification_time_string);                                         // Ausgabe des Zeitpunkts der letzten Änderung der Datei
+    struct tm* modification_time = localtime(&file_stat.st_mtime);                                                          // Umwandeln des Zeitpunkts der letzten Änderung der Datei in eine lokale Zeitstruktur
+    char modification_time_string[20];                                                                                      // Deklaration eines Char-Arrays zur Speicherung der formatierten Zeit
+    strftime(modification_time_string, sizeof(modification_time_string), "%a %b %d %H:%M:%S %Z %Y", modification_time);     // Formatieren des Zeitpunkts der letzten Änderung der Datei
+    printf("Letzte Veränderung der Datei: %s\n", modification_time_string);                                                 // Ausgabe des Zeitpunkts der letzten Änderung der Datei
+
+    printf("Erstellungszeitpunkt unter Linux nicht verfügbar.\n");       
 }
 
-int main(int argc, char *argv[]) {                                                                                  // Definition der Hauptfunktion
-    if (argc < 2) {                                                                                                 // Überprüfung, ob der Benutzer mindestens einen Dateinamen angegeben hat
-        printf("Zur Nutzung bitte mindestens einen Dateinamen angeben.\n");                                         // Ausgabe einer Fehlermeldung                                        
-        return 1;                                                                                                   // Rückgabe eines Fehlercodes
+int main(int argc, char *argv[]) {                                                                                          // Definition der Hauptfunktion
+    if (argc < 2) {                                                                                                         // Überprüfung, ob der Benutzer mindestens einen Dateinamen angegeben hat
+        printf("Zur Nutzung bitte mindestens einen Dateinamen angeben.\n");                                                 // Ausgabe einer Fehlermeldung                                        
+        return -1;                                                                                                           // Rückgabe eines Fehlercodes
     }
-    for (int i = 1; i < argc; i++) {                                                                                // Schleife über alle angegebenen Dateinamen
-        printf("Dateiname: %s\n", argv[i]);                                                                         // Ausgabe des aktuellen Dateinamens
-        print_file_info(argv[i]);                                                                                   // Aufruf der Funktion zur Ausgabe der Dateiinformationen
-        printf("\n");                                                                                               // Ausgabe einer Leerzeile zur Trennung der Informationen
+    for (int i = 1; i < argc; i++) {                                                                                        // Schleife über alle angegebenen Dateinamen
+        printf("Dateiname: %s\n", argv[i]);                                                                                 // Ausgabe des aktuellen Dateinamens
+        print_file_info(argv[i]);                                                                                           // Aufruf der Funktion zur Ausgabe der Dateiinformationen
+        printf("\n");                                                                                                       // Ausgabe einer Leerzeile zur Trennung der Informationen
     }
-    return 0;                                                                                                       // Erfolgreiches Beenden des Programms
+    return 0;                                                                                                               // Erfolgreiches Beenden des Programms
 }
