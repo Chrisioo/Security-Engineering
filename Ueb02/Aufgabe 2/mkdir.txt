@@ -1,8 +1,0 @@
-a) Kurzbeschreibung
-    Legt neue Verzeichnisse an
-b) Installationspfad
-    /usr/bin/mkdir
-c) Beispiel
-    mkdir neuesverzeichnis
-d) Entscheidene Systemcalls 
-    mkdir, mkdirat

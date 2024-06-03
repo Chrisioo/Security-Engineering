@@ -1,8 +1,0 @@
-a) Kurzbeschreibung
-    Passt Besitzer oder Gruppenzugehörigkeit einer Datei oder eines Verzeichnisses an
-b) Installationspfad
-    /usr/bin/chown
-c) Beispiel
-    chown root datei.sh
-d) Entscheidene Systemcalls
-    chown, lstat

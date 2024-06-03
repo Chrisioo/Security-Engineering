@@ -1,8 +1,0 @@
-a) Kurzbeschreibung
-    Sendet ein Signal an einen Prozess
-b) Installationspfad
-    /usr/bin/kill
-c) Beispiel
-    kill -9 1234
-d) Entscheidene Systemcalls 
-    kill

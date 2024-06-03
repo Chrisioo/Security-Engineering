@@ -1,8 +1,0 @@
-a) Kurzbeschreibung
-    Entfernt Verzeichnis, wenn es leer ist
-b) Installationspfad
-    /usr/bin/rmdir
-c) Beispiel
-    rmdir altesverzeichnis
-d) Entscheidene Systemcalls 
-    rmdir, unlinkat
