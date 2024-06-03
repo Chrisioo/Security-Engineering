@@ -14,6 +14,7 @@ if [ ! -f $1 ]; then                                # -f: Check, ob die Datei ex
 fi
 
 # Datei wird in verschiedene Formate archiviert
+# Kommando muss jeweils kompletten Namen des Archivs und den Dateinamen selbst enthalten, also z.B. tar -cvf datei.tar datei
 tar -cvf "$1.tar" "$1"
 tar -czvf "$1.tar.gz" "$1"
 tar -cjvf "$1.tar.bz2" "$1"
