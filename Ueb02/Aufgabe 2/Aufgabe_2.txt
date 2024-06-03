@@ -90,9 +90,10 @@
 
 10. wget 
     a) Kurzbeschreibung
-    
+        Nicht-interaktiver Netzwerkdownloader
     b) Installationspfad
-
+        /usr/bin/wget
     c) Beispiel
-
+        wget http://www.google.com
     d) Entscheidene Systemcalls
+        connect, recv
