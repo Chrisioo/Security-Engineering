@@ -1,0 +1,5 @@
+Eine Zip-Bombe ist ist eine bösartige Datei, die dazu konzipiert ist, das System des Opfers zu verlangsamen oder zum Absturz zu bringen. 
+Sie wird in der Regel als Archivdatei getarnt, die eine große Menge an komprimierten Daten enthält. 
+Wenn das Opfer versucht, die Datei zu entpacken, entstehen riesige Dateien, die weitaus mehr Speicherplatz als die ursprüngliche Datei benötigen.
+Dies kann dazu führen, dass das System abstürzt oder unbrauchbar wird. 
+Zip-Bomben werden oft als Angriffsmethode von Hackern verwendet, um Schaden anzurichten oder Daten zu stehlen. 
