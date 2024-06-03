@@ -1,13 +1,13 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -std=c99
+CC = gcc                                            
+CFLAGS = -Wall -Wextra -std=c99                 
 
-all: fileinfo
+all: fileinfo                                   
 
-fileinfo: fileinfo.c
-    $(CC) $(CFLAGS) -o fileinfo fileinfo.c
+fileinfo: fileinfo.c                                
+    $(CC) $(CFLAGS) -o fileinfo fileinfo.c      
 
-fileinfo.o: fileinfo.c
-    $(CC) $(CFLAGS) -c fileinfo.c
+fileinfo.o: fileinfo.c                          
+    $(CC) $(CFLAGS) -c fileinfo.c               
 
-clean:
-    rm -f fileinfo fileinfo.o
+clean:                                          
+    rm -f fileinfo fileinfo.o                   

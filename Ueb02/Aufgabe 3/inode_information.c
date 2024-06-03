@@ -8,28 +8,28 @@
 #include <time.h>            // Einbinden von Funktionen und Strukturen zur Zeitverwaltung
 
 // Ausgabe der Informationen zu einer vom Benutzer angegebenen Datei
-void print_file_info(const char *filename) {                                                                        // Definition der Funktion zur Ausgabe von Dateiinformationen
-    struct stat file_stat;                                                                                          // Deklaration einer Struktur zum Speichern der Dateiinformationen
-    if (stat(filename, &file_stat) == -1) {                                                                         // Abrufen der Dateiinformationen und Überprüfung auf Fehler
-        perror("stat");                                                                                             // Ausgabe einer Fehlermeldung, falls stat fehlschlägt
-        return;                                                                                                     // Beenden der Funktion im Fehlerfall
+void print_file_info(const char *filename) {                                                                                // Definition der Funktion zur Ausgabe von Dateiinformationen
+    struct stat file_stat;                                                                                                  // Deklaration einer Struktur zum Speichern der Dateiinformationen
+    if (stat(filename, &file_stat) == -1) {                                                                                 // Abrufen der Dateiinformationen und Check auf Fehler
+        perror("stat");                                                                                                     // Ausgabe einer Fehlermeldung, falls stat fehlschlägt
+        return;                                                                                                             // Beenden der Funktion im Fehlerfall
     }
 
     // Bestimmen und Ausgeben des Dateityps
     printf("Dateityp: ");                                   
-    if (S_ISREG(file_stat.st_mode))                                                                                 // Überprüfung, ob es sich um eine reguläre Datei handelt
+    if (S_ISREG(file_stat.st_mode))                                                                                         // Check, ob es sich um eine reguläre Datei handelt
         printf("Reguläre Datei\n");                         
-    else if (S_ISDIR(file_stat.st_mode))                                                                            // Überprüfung, ob es sich um ein Verzeichnis handelt
+    else if (S_ISDIR(file_stat.st_mode))                                                                                    // Check, ob es sich um ein Verzeichnis handelt
         printf("Verzeichnis\n");                            
-    else if (S_ISLNK(file_stat.st_mode))                                                                            // Überprüfung, ob es sich um einen Link handelt
+    else if (S_ISLNK(file_stat.st_mode))                                                                                    // Check, ob es sich um einen Link handelt
         printf("Link\n");                                   
-    else if (S_ISFIFO(file_stat.st_mode))                                                                           // Überprüfung, ob es sich um eine FIFO/pipe handelt
+    else if (S_ISFIFO(file_stat.st_mode))                                                                                   // Check, ob es sich um eine FIFO/pipe handelt
         printf("FIFO/pipe\n");                              
-    else if (S_ISCHR(file_stat.st_mode))                                                                            // Überprüfung, ob es sich um eine Char-Datei handelt
+    else if (S_ISCHR(file_stat.st_mode))                                                                                    // Check, ob es sich um eine Char-Datei handelt
         printf("Char\n");                                   
-    else if (S_ISSOCK(file_stat.st_mode))                                                                           // Überprüfung, ob es sich um einen Socket handelt
+    else if (S_ISSOCK(file_stat.st_mode))                                                                                   // Check, ob es sich um einen Socket handelt
         printf("Socket\n");                                                                                         
-    else                                                                                                            // Wenn keiner der obigen Fälle zutrifft, Ausgabe "Unbekannter Dateityp"
+    else                                                                                                                    // Wenn keiner der obigen Fälle zutrifft, Ausgabe "Unbekannter Dateityp"
         printf("Unbekannter Dateityp\n");                                                                          
 
     // Ausgabe der Benutzer- und Gruppen-ID des Dateieigentümers
@@ -38,7 +38,7 @@ void print_file_info(const char *filename) {                                    
 
     // Bestimmen des Namens des Benutzers, der die Datei besitzt
     struct passwd* user_name = getpwuid(file_stat.st_uid);                                                                  // Abrufen der Benutzerinformationen basierend auf der Benutzer-ID
-    if (user_name != NULL)                                                                                                  // Überprüfung, ob die Benutzerinformationen abgerufen werden konnten
+    if (user_name != NULL)                                                                                                  // Check, ob die Benutzerinformationen abgerufen werden konnten
         printf("Benutzername: %s\n", user_name->pw_name);                                                                   // Ausgabe des Benutzernamens
 
     // Ausgabe der Zugangsberechtigungen im oktalen Format
@@ -52,23 +52,31 @@ void print_file_info(const char *filename) {                                    
 
     // Ausgabe Zeitpunkt letzte Änderung der Inode-Informationen
     struct tm* change_time = localtime(&file_stat.st_ctime);                                                                // Umwandeln des Zeitpunkts der letzten Änderung der Inode-Informationen in eine lokale Zeitstruktur
-    char change_time_string[20];                                                                                            // Deklaration eines Char-Arrays zur Speicherung der formatierten Zeit
+    char change_time_string[40];                                                                                            // Deklaration eines Char-Arrays zur Speicherung der formatierten Zeit
     strftime(change_time_string, sizeof(change_time_string), "%a %b %d %H:%M:%S %Z %Y", change_time);                       // Formatieren des Zeitpunkts der letzten Änderung der Inode-Informationen
     printf("Letzte Änderung an Inode-Informationen: %s\n", change_time_string);                                             // Ausgabe des Zeitpunkts der letzten Änderung der Inode-Informationen
 
     // Ausgabe Zeitpunkt letzte Änderung der Datei
     struct tm* modification_time = localtime(&file_stat.st_mtime);                                                          // Umwandeln des Zeitpunkts der letzten Änderung der Datei in eine lokale Zeitstruktur
-    char modification_time_string[20];                                                                                      // Deklaration eines Char-Arrays zur Speicherung der formatierten Zeit
+    char modification_time_string[40];                                                                                      // Deklaration eines Char-Arrays zur Speicherung der formatierten Zeit
     strftime(modification_time_string, sizeof(modification_time_string), "%a %b %d %H:%M:%S %Z %Y", modification_time);     // Formatieren des Zeitpunkts der letzten Änderung der Datei
     printf("Letzte Veränderung der Datei: %s\n", modification_time_string);                                                 // Ausgabe des Zeitpunkts der letzten Änderung der Datei
 
-    printf("Erstellungszeitpunkt unter Linux nicht verfügbar.\n");       
+
+    #ifdef st_birthtime
+        struct tm* creation_time = localtime(&file_stat.st_birthtime);                                                      // Umwandeln des Zeitpunkts der Erstellung der Datei in eine lokale Zeitstruktur
+        char creation_time_string[40];                                                                                      // Deklaration eines Char-Arrays zur Speicherung der formatierten Zeit
+        strftime(creation_time_string, sizeof(creation_time_string), "%a %b %d %H:%M:%S %Z %Y", creation_time);             // Formatieren des Zeitpunkts der Erstellung der Datei
+        printf("Erstellungszeitpunkt der Datei: %s\n", creation_time_string);                                               // Ausgabe des Zeitpunkts der Erstellung der Datei
+    #else 
+        printf("Erstellungszeitpunkt der Datei: Nicht verfügbar\n");                                                        // Ausgabe, dass der Erstellungszeitpunkt nicht verfügbar ist
+    #endif
 }
 
 int main(int argc, char *argv[]) {                                                                                          // Definition der Hauptfunktion
-    if (argc < 2) {                                                                                                         // Überprüfung, ob der Benutzer mindestens einen Dateinamen angegeben hat
+    if (argc < 2) {                                                                                                         // Check, ob der Benutzer mindestens einen Dateinamen angegeben hat
         printf("Zur Nutzung bitte mindestens einen Dateinamen angeben.\n");                                                 // Ausgabe einer Fehlermeldung                                        
-        return -1;                                                                                                           // Rückgabe eines Fehlercodes
+        return -1;                                                                                                          // Rückgabe eines Fehlercodes
     }
     for (int i = 1; i < argc; i++) {                                                                                        // Schleife über alle angegebenen Dateinamen
         printf("Dateiname: %s\n", argv[i]);                                                                                 // Ausgabe des aktuellen Dateinamens
