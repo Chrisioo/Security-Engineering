@@ -37,35 +37,35 @@ void print_file_info(const char *filename) {
     printf("Group ID: (%d)\n", file_stat.st_gid);
 
     // Bestimmen des Namens des Benutzers, der die Datei besitzt
-    struct passwd* pw = getpwuid(file_stat.st_uid);         
-    if (pw != NULL)                                         
-        printf("Benutzername: %s\n", pw->pw_name);             
+    struct passwd* user_name = getpwuid(file_stat.st_uid);         
+    if (user_name != NULL)                                         
+        printf("Benutzername: %s\n", user_name->pw_name);           
 
     // Bestimmen des Namens der Gruppe, die die Datei besitzt
-    struct group* gr = getgrgid(file_stat.st_gid);          
-    if (gr != NULL)                                         
-        printf("Gruppenname: %s\n", gr->gr_name);          
+    struct group* group_name = getgrgid(file_stat.st_gid);          
+    if (group_name != NULL)                                         
+        printf("Gruppenname: %s\n", group_name->gr_name);          
 
     // Ausgabe der Zugangsberechtigungen
     printf("Zugangsberechtigungen (oktal): %o\n", file_stat.st_mode & 0777);
 
     // Ausgabe Zeitpunkt letzter Zugriff auf die Datei
-    struct tm* atime = localtime(&file_stat.st_atime);
-    char atime_str[20];
-    strftime(atime_str, sizeof(atime_str), "%d.%m.%Y %H:%M:%S", atime);
-    printf("Letzter Zugriff auf Datei: %s\n", atime_str);
+    struct tm* access_time = localtime(&file_stat.st_atime);
+    char access_time_string[20];
+    strftime(access_time_string, sizeof(access_time_string), "%d.%m.%Y %H:%M:%S", access_time);
+    printf("Letzter Zugriff auf Datei: %s\n", access_time_string);
 
     // Ausgabe Zeitpunkt letzte Änderung der Inode-Informationen
-    struct tm* ctime = localtime(&file_stat.st_ctime);
-    char ctime_str[20];
-    strftime(ctime_str, sizeof(ctime_str), "%d.%m.%Y %H:%M:%S", ctime);
-    printf("Letzte Änderung an Inode-Informationen: %s\n", ctime_str);
+    struct tm* change_time = localtime(&file_stat.st_ctime);
+    char change_time_string[20];
+    strftime(change_time_string, sizeof(change_time_string), "%d.%m.%Y %H:%M:%S", ctime);
+    printf("Letzte Änderung an Inode-Informationen: %s\n", change_time_string);
 
-    // Last modification time
-    struct tm* mtime = localtime(&file_stat.st_mtime);
-    char mtime_str[20];
-    strftime(mtime_str, sizeof(mtime_str), "%d.%m.%Y %H:%M:%S", mtime);
-    printf("Letzte Veränderung der Datei: %s\n", mtime_str);
+    // Ausgabe Zeitpunkt letzte Änderung der Datei
+    struct tm* modification_time = localtime(&file_stat.st_mtime);
+    char modification_time_string[20];
+    strftime(modification_time_string, sizeof(modification_time_string), "%d.%m.%Y %H:%M:%S", modification_time);
+    printf("Letzte Veränderung der Datei: %s\n", modification_time_string);
 }
 
 int main(int argc, char *argv[]) {
