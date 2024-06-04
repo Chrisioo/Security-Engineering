@@ -1,7 +1,0 @@
-Anzahl generierter Zahlen bis y generierter wurde:
-    randomNumber_1: 22027
-    randomNumber_2: 12227
-    randomNumber_3: 17906
-    randomNumber_4: 19914
-    randomNumber_5: 9109
-Durchschnitt: 16256.6
