@@ -1,13 +1,11 @@
-CC = gcc                                            
-CFLAGS = -Wall -Wextra -std=c99                 
+CC = gcc                                             # Compiler command
 
-all: fileinfo                                   
+CFLAGS = -Wall -Wextra -std=c99                      # Compiler flags, -Wall: Enable all warnings, -Wextra: Enable extra warnings, -std=c99: Use C99 standard
 
-fileinfo: fileinfo.c                                
-    $(CC) $(CFLAGS) -o fileinfo fileinfo.c      
+all: fileinfo                                        # Default target, depends on 'fileinfo'
 
-fileinfo.o: fileinfo.c                          
-    $(CC) $(CFLAGS) -c fileinfo.c               
+fileinfo: fileinfo.c                                 # Target 'fileinfo' depends on 'fileinfo.c'
+    $(CC) $(CFLAGS) -o fileinfo fileinfo.c           # Compile 'fileinfo.c' into executable 'fileinfo'
 
-clean:                                          
-    rm -f fileinfo fileinfo.o                   
+fileinfo.o: fileinfo.c                               # Target 'fileinfo.o' depends on 'fileinfo.c'
+    $(CC) $(CFLAGS) -c fileinfo.c                    # Compile 'fileinfo.c' into object file 'fileinfo.o'
