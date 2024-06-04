@@ -26,7 +26,7 @@ void print_file_info(const char *filename) {                                    
     else if (S_ISFIFO(file_stat.st_mode))                                                                                   // Check, ob es sich um eine FIFO/pipe handelt
         printf("FIFO/pipe\n");                              
     else if (S_ISCHR(file_stat.st_mode))                                                                                    // Check, ob es sich um eine Char-Datei handelt
-        printf("Char\n");                                   
+        printf("Char-Datei\n");                                   
     else if (S_ISSOCK(file_stat.st_mode))                                                                                   // Check, ob es sich um einen Socket handelt
         printf("Socket\n");                                                                                         
     else                                                                                                                    // Wenn keiner der obigen Fälle zutrifft, Ausgabe "Unbekannter Dateityp"
