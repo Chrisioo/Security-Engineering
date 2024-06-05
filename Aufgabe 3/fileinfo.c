@@ -2,11 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-#include <sys/sysmacros.h>
 #include <time.h>
 #include <pwd.h>
-#include <fcntl.h>
-#include <linux/stat.h>
 
 int main(int argc, char *argv[]) {
 struct stat sb;
