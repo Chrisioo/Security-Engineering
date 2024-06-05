@@ -11,7 +11,7 @@
 void print_file_info(const char *filename) {                                                                                // Definition der Funktion zur Ausgabe von Dateiinformationen
     struct stat file_stat;                                                                                                  // Deklaration einer Struktur zum Speichern der Dateiinformationen
     if (stat(filename, &file_stat) == -1) {                                                                                 // Abrufen der Dateiinformationen und Check auf Fehler
-        perror("stat");                                                                                                     // Ausgabe einer Fehlermeldung, falls stat fehlschlägt
+        perror("");                                                                                                     // Ausgabe einer Fehlermeldung, falls stat fehlschlägt
         return;                                                                                                             // Beenden der Funktion im Fehlerfall
     }
 
