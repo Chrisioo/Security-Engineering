@@ -2,13 +2,14 @@
 #include <sys/stat.h>        // Einbinden von Funktionen und Strukturen für Dateistatistiken, wie z.B. stat, lstat, fstat
 #include <pwd.h>             // Einbinden von Funktionen und Strukturen zur Benutzerverwaltung
 #include <time.h>            // Einbinden von Funktionen und Strukturen zur Zeitverwaltung
+#include <stdlib.h>          // Einbinden der Standard Bibliothek
 
 // Ausgabe der Informationen zu einer vom Benutzer angegebenen Datei
 void print_file_info(const char *filename) {                                                                                // Definition der Funktion zur Ausgabe von Dateiinformationen
     struct stat file_stat;                                                                                                  // Deklaration einer Struktur zum Speichern der Dateiinformationen
     if (stat(filename, &file_stat) == -1) {                                                                                 // Abrufen der Dateiinformationen und Check auf Fehler
-        perror("");                                                                                                         // Ausgabe einer Fehlermeldung, falls stat fehlschlägt
-        return;                                                                                                             // Beenden der Funktion im Fehlerfall
+        perror("lstat");                                                                                                    // Ausgabe einer Fehlermeldung, falls stat fehlschlägt
+        exit(EXIT_FAILURE);                                                                                                 // Beenden der Funktion im Fehlerfall
     }
 
     // Bestimmen und Ausgeben des Dateityps
@@ -29,8 +30,8 @@ void print_file_info(const char *filename) {                                    
         printf("Unbekannter Dateityp\n");                                                                          
 
     // Ausgabe der Benutzer- und Gruppen-ID des Dateieigentümers
-    printf("User ID: (%d)\n", file_stat.st_uid);                                                                    
-    printf("Group ID: (%d)\n", file_stat.st_gid);                                                                   
+    printf("Benutzer-ID: (%d)\n", file_stat.st_uid);                                                                        // Ausgabe der Benutzer-ID                         
+    printf("Gruppen-ID: (%d)\n", file_stat.st_gid);                                                                         // Ausgabe der Gruppen-ID
 
     // Bestimmen des Namens des Benutzers, der die Datei besitzt
     struct passwd* user_name = getpwuid(file_stat.st_uid);                                                                  // Abrufen der Benutzerinformationen basierend auf der Benutzer-ID
@@ -70,8 +71,8 @@ void print_file_info(const char *filename) {                                    
 
 int main(int argc, char *argv[]) {                                                                                          // Definition der Hauptfunktion
     if (argc < 2) {                                                                                                         // Check, ob der Benutzer mindestens einen Dateinamen angegeben hat
-        printf("Zur Nutzung bitte mindestens einen Dateinamen angeben.\n");                                                 // Ausgabe einer Fehlermeldung                                        
-        return -1;                                                                                                          // Rückgabe eines Fehlercodes
+        fprintf(stderr, "Bitte geben Sie mindestens einen Dateinamen an.\n");                                               // Ausgabe einer Fehlermeldung                                       
+        exit(EXIT_FAILURE);                                                                                                 // Rückgabe eines Fehlercodes
     }
     for (int i = 1; i < argc; i++) {                                                                                        // Schleife über alle angegebenen Dateinamen
         printf("Dateiname: %s\n", argv[i]);                                                                                 // Ausgabe des aktuellen Dateinamens
