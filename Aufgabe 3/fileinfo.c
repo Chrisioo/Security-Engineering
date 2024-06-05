@@ -1,17 +1,13 @@
 #include <stdio.h>           // Einbinden der Standard Input/Output Bibliothek
-#include <stdlib.h>          // Einbinden der Standard Library
-#include <sys/types.h>       // Einbinden von Datentypen wie pid_t, mode_t etc.
-#include <sys/stat.h>        // Einbinden von Funktionen und Strukturen für Dateistatistiken
-#include <unistd.h>          // Einbinden von Symbolkonstanten und Typen
+#include <sys/stat.h>        // Einbinden von Funktionen und Strukturen für Dateistatistiken, wie z.B. stat, lstat, fstat
 #include <pwd.h>             // Einbinden von Funktionen und Strukturen zur Benutzerverwaltung
-#include <grp.h>             // Einbinden von Funktionen und Strukturen zur Gruppenverwaltung
 #include <time.h>            // Einbinden von Funktionen und Strukturen zur Zeitverwaltung
 
 // Ausgabe der Informationen zu einer vom Benutzer angegebenen Datei
 void print_file_info(const char *filename) {                                                                                // Definition der Funktion zur Ausgabe von Dateiinformationen
     struct stat file_stat;                                                                                                  // Deklaration einer Struktur zum Speichern der Dateiinformationen
     if (stat(filename, &file_stat) == -1) {                                                                                 // Abrufen der Dateiinformationen und Check auf Fehler
-        perror("");                                                                                                     // Ausgabe einer Fehlermeldung, falls stat fehlschlägt
+        perror("");                                                                                                         // Ausgabe einer Fehlermeldung, falls stat fehlschlägt
         return;                                                                                                             // Beenden der Funktion im Fehlerfall
     }
 
@@ -38,9 +34,8 @@ void print_file_info(const char *filename) {                                    
 
     // Bestimmen des Namens des Benutzers, der die Datei besitzt
     struct passwd* user_name = getpwuid(file_stat.st_uid);                                                                  // Abrufen der Benutzerinformationen basierend auf der Benutzer-ID
-    if (user_name != NULL)                                                                                                  // Check, ob die Benutzerinformationen abgerufen werden konnten
-        printf("Benutzername: %s\n", user_name->pw_name);                                                                   // Ausgabe des Benutzernamens
-
+    printf("Benutzername: %s\n", user_name->pw_name);                                                                       // Ausgabe des Benutzernamens
+                                                                    
     // Ausgabe der Zugangsberechtigungen im oktalen Format
     printf("Zugangsberechtigungen (oktal): %o\n", file_stat.st_mode & 0777);    
 
