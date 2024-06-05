@@ -1,11 +1,8 @@
-CC = gcc                                             # Compiler command
+CC = gcc                                                # Definiert zu verwendenden Compiler      
 
-CFLAGS = -Wall -Wextra -std=c99                      # Compiler flags, -Wall: Enable all warnings, -Wextra: Enable extra warnings, -std=c99: Use C99 standard
+CFLAGS = -Wall                                          # Definiert Compiler-Flags, gibt alle Warnungen aus
 
-all: fileinfo                                        # Default target, depends on 'fileinfo'
-
-fileinfo: fileinfo.c                                 # Target 'fileinfo' depends on 'fileinfo.c'
-    $(CC) $(CFLAGS) -o fileinfo fileinfo.c           # Compile 'fileinfo.c' into executable 'fileinfo'
-
-fileinfo.o: fileinfo.c                               # Target 'fileinfo.o' depends on 'fileinfo.c'
-    $(CC) $(CFLAGS) -c fileinfo.c                    # Compile 'fileinfo.c' into object file 'fileinfo.o'
+%: %.c 
+    $(CC) $(CFLAGS) -o $@ $<                            # Erstellt aus Quellcode-Datei ein ausführbares Programm
+```                                                     # "%c: %c.c" ist ein Pattern-Rule, das für alle Dateien mit der Endung .c gilt
+                                                        # Dadurch wird für jede .c-Datei eine eigene ausführbare Datei erstellt
