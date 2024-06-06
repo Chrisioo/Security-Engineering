@@ -22,10 +22,10 @@ fi
 
 # Dateien werden in verschiedene Formate archiviert
 # Kommando muss jeweils kompletten Namen des Archivs und den Dateinamen selbst enthalten, also z.B. tar -cvf datei.tar datei
-tar -cvf "archiv.tar" "$1" "$2"
-tar -czvf "archiv.tar.gz" "$1" "$2"
+tar -cf "archiv.tar" "$1" "$2"
+tar -czf "archiv.tar.gz" "$1" "$2"
+tar -cjf "archiv.tar.bz2" "$1" "$2"
 zip "archiv.zip" "$1" "$2"
-tar -cjvf "archiv.tar.bz2" "$1" "$2"
 
 # Inhalt der Archive wird ausgegeben
 # Ausgabe von tar 
