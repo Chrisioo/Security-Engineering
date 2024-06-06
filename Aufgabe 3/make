@@ -1,8 +1,0 @@
-CC = gcc                                                # Definiert zu verwendenden Compiler      
-
-CFLAGS = -Wall                                          # Definiert Compiler-Flags, gibt alle Warnungen aus
-
-%: %.c 
-    $(CC) $(CFLAGS) -o $@ $<                            # Erstellt aus Quellcode-Datei ein ausführbares Programm
-```                                                     # "%c: %c.c" ist ein Pattern-Rule, das für alle Dateien mit der Endung .c gilt
-                                                        # Dadurch wird für jede .c-Datei eine eigene ausführbare Datei erstellt
