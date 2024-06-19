@@ -22,8 +22,8 @@ void print_image_info (const char *filename) {                                  
         perror(filename);                                                           // Print an error message if the file was not opened successfully
         exit(EXIT_FAILURE);                                                         // Exit the program with an error code
     }
-    char camera_model[BUFFER_SIZE];                                                 // String to save the camera model, created with size of BUFFER_SIZE
-    char date_time[BUFFER_SIZE];                                                    // String to save the date and time, created with size of BUFFER_SIZE        
+    char camera_model[BUFFER_SIZE];                                                 // String to save the camera model, initialized with size of BUFFER_SIZE
+    char date_time[BUFFER_SIZE];                                                    // String to save the date and time, initialized with size of BUFFER_SIZE        
     read_metdata(filedata, CAMERA_MODEL_OFFSET, camera_model, BUFFER_SIZE);         // Read the camera model and date and time from the image file
     read_metdata(filedata, DATA_TIME_OFFSET, date_time, BUFFER_SIZE);               // Read the camera model and date and time from the image file
 
