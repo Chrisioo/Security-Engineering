@@ -1,36 +1,22 @@
 #!/bin/sh
 
-# Aufruf der Hauptfunktion mit dem übergebenen Dateinamen
-file_type=$(file "$1")
-
-if echo "$file_type" | grep -q "PDF document"; then
-    view_pdf "$1"
-elif echo "$file_type" | grep -q "image"; then
-    view_image "$1"
-elif echo "$file_type" | grep -q "text"; then
-    view_text "$1"
-elif echo "$file_type" | grep -q "OpenDocument"; then
-    view_odt "$1"
-else
-    echo "Unbekannte Dateiendung: $file_type"
+if [ -z "$1" ]; then                                            # Check, ob eine Datei angegeben wurde
+    echo "Usage: $0 <file>"                                     # Ausgabe, wenn keine Datei angegeben wurde
+    exit 1                                                      # Exit mit Fehlercode 1
 fi
 
-# Funktion zur Anzeige von Bilddateien
-view_image() {
-    /usr/bin/xdg-open "$1"
-}
+file_type=$(file "$1")                                          # Dateiendung auslesen mit Kommando "file"
 
-# Funktion zur Anzeige von PDF-Dateien
-view_pdf() {
-    /usr/bin/evince "$1"
-}
-
-# Funktion zur Anzeige von Textdateien
-view_text() {
-    /usr/bin/less "$1"
-}
-
-# Funktion zur Anzeige von OpenDocument Texten
-view_odt() {
-    /usr/bin/libreoffice --writer "$1"
-}
+if echo "$file_type" | grep -q "PDF document"; then             # Check, ob die Datei eine PDF-Datei ist
+    /usr/bin/evince "$1"                                        # Oeffnen mit evince
+elif echo "$file_type" | grep -q "image"; then                  # Check, ob die Datei ein Bild ist
+    /usr/bin/xdg-open "$1"                                      # Oeffnen mit xdg-open
+elif echo "$file_type" | grep -q "text"; then                   # Check, ob die Datei eine Textdatei ist
+    /usr/bin/less "$1"                                          # Oeffnen mit less                                      
+elif echo "$file_type" | grep -q "OpenDocument"; then           # Check, ob die Datei eine OpenOffice-Datei ist
+    /usr/bin/libreoffice "$1"                                   # Oeffnen mit libreoffice                           
+else
+    echo "Unbekannte Dateiendung: $file_type"                   # Ausgabe, wenn die Dateiendung unbekannt ist
+    exit 1                                                      # Exit mit Fehlercode 1
+fi
+exit 0                                                          # Bei Erfolg Exit mit 0
