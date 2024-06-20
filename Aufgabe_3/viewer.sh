@@ -1,5 +1,20 @@
 #!/bin/sh
 
+# Aufruf der Hauptfunktion mit dem übergebenen Dateinamen
+file_type=$(file "$1")
+
+if echo "$file_type" | grep -q "PDF document"; then
+    view_pdf "$1"
+elif echo "$file_type" | grep -q "image"; then
+    view_image "$1"
+elif echo "$file_type" | grep -q "text"; then
+    view_text "$1"
+elif echo "$file_type" | grep -q "OpenDocument"; then
+    view_odt "$1"
+else
+    echo "Unbekannte Dateiendung: $file_type"
+fi
+
 # Funktion zur Anzeige von Bilddateien
 view_image() {
     /usr/bin/xdg-open "$1"
@@ -19,23 +34,3 @@ view_text() {
 view_odt() {
     /usr/bin/libreoffice --writer "$1"
 }
-
-# Hauptfunktion zur Dateitypunterscheidung und Anzeige
-main() {
-    file_type=$(file "$1")
-
-    if echo "$file_type" | grep -q "PDF document"; then
-        view_pdf "$1"
-    elif echo "$file_type" | grep -q "image"; then
-        view_image "$1"
-    elif echo "$file_type" | grep -q "text"; then
-        view_text "$1"
-    elif echo "$file_type" | grep -q "OpenDocument"; then
-        view_odt "$1"
-    else
-        echo "Unbekannte Dateiendung: $file_type"
-    fi
-}
-
-# Aufruf der Hauptfunktion mit dem übergebenen Dateinamen
-main "$1"
