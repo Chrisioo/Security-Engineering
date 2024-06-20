@@ -16,7 +16,7 @@ elif echo "$file_type" | grep -q "text"; then                   # Check, ob die 
 elif echo "$file_type" | grep -q "OpenDocument"; then           # Check, ob die Datei eine OpenOffice-Datei ist
     /usr/bin/libreoffice "$1"                                   # Oeffnen mit libreoffice                           
 else
-    echo "Unbekannte Dateiendung: $file_type"                   # Ausgabe, wenn die Dateiendung unbekannt ist
+    echo "Unbekanntr Dateityp: $file_type"                      # Ausgabe, wenn die Dateiendung unbekannt ist
     exit 1                                                      # Exit mit Fehlercode 1
 fi
 exit 0                                                          # Bei Erfolg Exit mit 0
