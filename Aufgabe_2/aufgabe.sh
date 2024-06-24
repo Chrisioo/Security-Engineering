@@ -1,7 +1,1 @@
-#!/bin/sh
-
-sed -n '/<h3><span class="mw-headline" id="Abschlusstabelle">/,/</table>/p' fussball-tabelle.html | \
-                                                           grep -F "a href=" | \
-                                                           sed -E 's/<[^>]+>//g' | \
-                                                           sed '1d' | \
-                                                           awk '{print NR ". " $0}' > test.txt
+awk '/id="Abschlusstabelle"/{flag=1} flag; /<\/table>/{flag=0}' fussball-tabelle.html | grep -o 'href.*'  | sed '1d' | cut -d'>' -f2- | sed 's/<\/a>//g' | egrep -n '*' | sed 's/:/. /' | sed 's/([A-Za-z])//g' > tabelle.txt

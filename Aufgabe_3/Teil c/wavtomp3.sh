@@ -20,3 +20,4 @@ for wavfile in "$@"; do
         echo "Converted $wavfile to $base.mp3"
     fi
 done
+exit 0
