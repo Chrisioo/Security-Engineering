@@ -1,7 +1,7 @@
 #!/bin/sh
 
-for i in $*             # $* gibt alle Argumente aus
-do                      # Schleife wird gestartet, durchläuft alle Argumente
-    echo "Hallo $i"     # $i gibt das aktuelle Argument aus, z.B. "Hallo Hans"
-done                    # Schleife wird beendet
-exit 0                  # Programm wird mit 0 beendet, d.h. keine Fehler
+for i in $*             # $* returns all arguments
+do                      # loop through all arguments
+    echo "Hallo $i"     # $i is the current argument, returns "Hallo $i"
+done                    # loop is finished
+exit 0                  # exit with code 0 if no errors occurred
