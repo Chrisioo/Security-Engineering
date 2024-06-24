@@ -1,10 +1,10 @@
 #!/bin/sh
 
-awk '/id="Abschlusstabelle"/{flag=1} flag; /<\/table>/{flag=0}' fussball-tabelle.html |     # awk searches file fussball-tabelle.html for 'id="Abschlusstabelle"' and 'table'
-        grep -o 'href.*'  |                                                                 # grep searches for pattern 'href.*'
-        sed '1d' |                                                                          # sed removes first line
-        cut -d'>' -f2- |                                                                    # cut cuts off lines after the '>', returns the rest
-        sed 's/<\/a>//g' |                                                                  # sed deletes the '</a>' and replaces it with nothing
-        egrep -n '*' |                                                                      # egrep searches for pattern '*'
-        sed 's/:/. /' |                                                                     # sed replaces ':' with '. '
-        sed 's/([A-Za-z])//g' > tabelle.txt                                                 # sed removes all letters and replaces them with nothing
+awk '/id="Abschlusstabelle"/{flag=1} flag; /<\/table>/{flag=0}' fussball-tabelle.html |  # Extract the HTML table with id="Abschlusstabelle" from fussball-tabelle.html
+    grep -o 'href.*'  |                                                                  # Extract lines containing 'href'
+    sed '1d' |                                                                           # Remove the first line
+    cut -d'>' -f2- |                                                                     # Cut the line at the first '>', keeping the part after it
+    sed 's/<\/a>//g' |                                                                   # Remove the closing '</a>' HTML tag
+    egrep -n '*' |                                                                       # Add line numbers to each line
+    sed 's/:/. /' |                                                                      # Replace ':' with '. ' to format the line numbers
+    sed 's/([A-Za-z])//g' > tabelle.txt                                                  # Remove all letters, leaving only numbers and symbols, and save to tabelle.txt

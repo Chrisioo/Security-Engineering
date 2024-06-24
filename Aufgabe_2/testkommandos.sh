@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 wget -O fussball-tabelle.html https://de.wikipedia.org/wiki/Fu%C3%9Fball-Bundesliga_2023/24                             # downloading https://de.wikipedia.org/wiki/Fussball-Bundesliga_2023/24 
 sed -e "s:<th\>:<td\>:g" -e "s:</th>:</td>:g" <fussball-tabelle.html > fussball-tabelle2.html                           # <fussball-tabelle.html> is converted to <fussball-tabelle2.html>, all </th> are replaced by </td>
