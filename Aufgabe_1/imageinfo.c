@@ -8,6 +8,9 @@
 #define DATA_TIME_OFFSET 0xe4                                                       // Offset of the date and time in flash.JPG    
 #define STRING_SIZE 1024                                                            // Size of the string used for reading metadata
 
+void print_image_info (const char *filename);                                       // Prints the camera model and date and time information of an image file
+void read_metadata (int filedata, off_t offset, char *string, size_t size);         // Reads metadata from a file at a given offset and stores it in a string
+
 /**
  * Prints the camera model and date and time information of an image file.
  * @param filename The path of the image file.
