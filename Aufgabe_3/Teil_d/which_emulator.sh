@@ -1,4 +1,4 @@
-#!/bin/sh                                    # Specify the shell interpreter to use
+#!/bin/sh                                    
 
 if [ "$#" -ne 1 ]; then                      # Check if the number of arguments passed to the script is not equal to 1
     echo "Usage: $0 <program name>"          # Print a usage message if the number of arguments is incorrect
