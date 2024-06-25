@@ -1,6 +1,6 @@
 #!/bin/sh
 
-awk '/id="Abschlusstabelle"/{flag=1} flag; /<\/table>/{flag=0}' fussball-tabelle.html |  # Extract the HTML table with id="Abschlusstabelle" from fussball-tabelle.html
+sed -n '/id="Abschlusstabelle"/,/<\/table>/p' fussball-tabelle.html |                    # Extract the HTML table with id="Abschlusstabelle" from fussball-tabelle.html
     grep -o 'href.*'  |                                                                  # Extract lines containing 'href'
     sed '1d' |                                                                           # Remove the first line
     cut -d'>' -f2- |                                                                     # Cut the line at the first '>', keeping the part after it
