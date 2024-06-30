@@ -1,7 +1,7 @@
 #include <stdlib.h>         // Für Standardbibliotheksfunktionen wie exit() und EXIT_FAILURE/SUCCESS
 #include <stdio.h>          // Für Ein-/Ausgabefunktionen wie printf() und fprintf()
 #include <unistd.h>         // Für POSIX-Funktionen wie fork() und execvp()
-#include <sys/types.h>      // Für Datentypen wie pid_t
+#include <sys/types.h>      // Für Datentyp pid_t 
 #include <sys/resource.h>   // Für die Funktion setpriority()
 
 /**
