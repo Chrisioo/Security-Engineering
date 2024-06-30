@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
     if (pid < 0) {                                                                      // Überprüfen, ob fork() fehlgeschlagen ist
         perror("fork");                                                                 // Fehlermeldung ausgeben
         exit(EXIT_FAILURE);                                                             // Programm beenden mit Fehlercode
-    } else if (pid == 0) {                                                              // Kindprozess
+    } else if (pid == 0) {                                                              // Kindprozess erstellen
         if (setpriority(PRIO_PROCESS, 0, 10) < 0) {                                     // Priorität des Kindprozesses auf 10 setzen
             perror("setpriority");                                                      // Fehlermeldung ausgeben, falls setpriority fehlschlägt
             exit(EXIT_FAILURE);                                                         // Kindprozess beenden mit Fehlercode
