@@ -17,7 +17,7 @@ union semaphor {
     int value; 																		// Integer-Wert für den Semaphore
     struct semid_ds *buffer; 														// Puffer für semctl
     unsigned short *array; 															// Array für Semaphore-Werte
-} arg;
+};
 
 
 /**
