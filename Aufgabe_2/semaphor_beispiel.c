@@ -9,8 +9,11 @@
 #define N_DATA 2000000 																// Definieren der Anzahl der Daten
 #define N_SHARED 20000 																// Definieren der Anzahl der gemeinsamen Daten
 
-// Definition einer Union für Semaphore
-union semun {
+/**
+ * Definition einer Union für Semaphore-Werte
+ * Eine Union ermöglicht es, dass mehrere Variablen von unterschiedlichen Typen an der selben Adresse liegen können
+ */
+union semaphor {
     int value; 																		// Integer-Wert für den Semaphore
     struct semid_ds *buffer; 														// Puffer für semctl
     unsigned short *array; 															// Array für Semaphore-Werte
@@ -53,7 +56,7 @@ int main() {
         exit(EXIT_FAILURE); 														// Programm beenden bei Fehler
     }
 
-    union semun sem_union; 															// Initialisieren einer Union für Semaphore
+    union semaphor sem_union; 															// Initialisieren einer Union für Semaphore
     sem_union.value = 0; 															// Setzen des Wertes auf 0
     if (semctl(sem_id, 0, SETVAL, sem_union) == -1) { 								// Initialisieren des ersten Semaphors mit 0
         perror("error initializing S0"); 											// Fehlermeldung ausgeben
