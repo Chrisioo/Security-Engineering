@@ -16,9 +16,13 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);                                                                 // Programm beenden mit Fehlercode
     }
 
-    pid_t pid = fork();                                                                     // Einen neuen Prozess mittels fork() erstellen
+    pid_t pid = fork();                                                                     
+                                                                                            // Einen neuen Prozess mittels fork() erstellen
+                                                                                            // pid_t = Prozessidentifikator, wird verwendet, um festzustellen, ob ein Prozess erfolgreich erstellt wurde
+                                                                                            // Der Wert von pid wird durch die PID des durch fork erzeugten Prozess gesetzt
 
     if (pid < 0) {                                                                          // Überprüfen, ob fork() fehlgeschlagen ist
+                                                                                            // In diesem Fall wird eine PID kleiner als 0 geliefert
         perror("fork");                                                                     // Fehlermeldung ausgeben
         exit(EXIT_FAILURE);                                                                 // Programm beenden mit Fehlercode
     } else if (pid == 0) {                                                                  // Kindprozess erstellen
