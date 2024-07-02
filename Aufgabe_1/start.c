@@ -84,5 +84,5 @@ int main(int argc, char **argv) {
         }
     }
     exit(EXIT_SUCCESS);                                                                     
-// Programm erfolgreich beenden
+    // Programm erfolgreich beenden
 }
