@@ -3,6 +3,7 @@
 #include <unistd.h>         // Für POSIX-Funktionen wie fork() und execvp()
 #include <sys/types.h>      // Für Datentyp pid_t 
 #include <sys/resource.h>   // Für die Funktion setpriority()
+#include <sys/wait.h>       // Für die Funktion waitpid() und Makros zur Statusüberprüfung
 
 /**
  * Hauptfunktion, die einen Kindprozess erstellt und ein angegebenes Programm mit Argumenten ausführt.
@@ -16,8 +17,7 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);                                                                 // Programm beenden mit Fehlercode
     }
 
-    pid_t pid = fork();                                                                     
-                                                                                            // Einen neuen Prozess mittels fork() erstellen
+    pid_t pid = fork();                                                                     // Einen neuen Prozess mittels fork() erstellen
                                                                                             // pid_t = Prozessidentifikator, wird verwendet, um festzustellen, ob ein Prozess erfolgreich erstellt wurde
                                                                                             // Der Wert von pid wird durch die PID des durch fork erzeugten Prozess gesetzt
 
@@ -38,15 +38,22 @@ int main(int argc, char **argv) {
         printf("Process %d started\n", pid);                                                // Die PID des gestarteten Prozesses ausgeben
 
         if (waitpid(pid, &status, 0) < 0) {                                                 // Auf das Ende des Kindprozesses warten
+                                                                                            // waitpid() sorgt dafür, dass der Elternprozess auf das Ende des Kindprozesses wartet
+                                                                                            // Stellt sicher, dass Elternprozess Informationen über die Beendigung des Kindprozesses erhalten kann
             perror("waitpid");                                                              // Fehlermeldung ausgeben, falls waitpid fehlschlägt
             exit(EXIT_FAILURE);                                                             // Programm beenden mit Fehlercode
         }
         if (WIFEXITED(status)) {                                                            // Überprüfen, ob der Prozess normal beendet wurde
+                                                                                            // WIFEXITED(status) prüft, ob Kindprozess normal beendet wurde
             printf("Return code: %d\n", WEXITSTATUS(status));                               // Den Rückgabecode des Prozesses ausgeben
+                                                                                            // WEXITSTATUS(status) gibt den Exitcode des Kindprozesses aus, falls dieser normal beendet wurde
         }
         if (WIFSIGNALED(status)) {                                                          // Prüfen, ob der Prozess durch ein Signal beendet wurde
+                                                                                            // WIFSIGNALED(status) prüft, ob Kindprozess durch ein Signal beendet wurde
             int signal = WTERMSIG(status);                                                  // Das Signal, das den Prozess beendet hat
+                                                                                            // WTERMSIG(status) gibt das Signal aus, das den Kindprozess beendet hat
             printf("Process terminated by signal %d (%s)\n", signal, strsignal(signal));    // Ausgabe des Signals und seiner Beschreibung
+                                                                                            // strsignal(signal) gibt die Bezeichnung des Signals aus, das den Kindprozess beendet hat
         }
     }
     exit(EXIT_SUCCESS);                                                                     // Programm erfolgreich beenden
