@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
     // Überprüfen, ob mindestens ein Argument übergeben wurde
     if (argc < 2) {              
         // Fehlermeldung ausgeben, falls keine Argumente übergeben wurden
-        fprintf(stderr, "usage: %s <program> <arguments>\n", argv[0]);     
+        fprintf(stderr, "Nutzung: %s <Programm> <Argumente>\n", argv[0]);     
         // Programm mit Fehlercode EXIT_FAILURE beenden                 
         exit(EXIT_FAILURE);                                                                 
     }
@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
         // Ansonsten handelt es sich um den Elternprozess
         int status;                                                                         
         // Variable zum Speichern des Status des Kindprozesses
-        printf("Process %d started\n", pid);                                                
+        printf("Prozess %d wurde gestartet\n", pid);                                                
         // Die PID des gestarteten Kindprozesses ausgeben
 
         if (waitpid(pid, &status, 0) < 0) {                                                 
@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
         if (WIFEXITED(status)) {                                                            
             // Überprüfen, ob der Prozess normal beendet wurde
             // WIFEXITED(status) prüft, ob der Kindprozess normal beendet wurde
-            printf("Return code: %d\n", WEXITSTATUS(status));                               
+            printf("Exit-Code: %d\n", WEXITSTATUS(status));                               
             // Den Rückgabecode des Prozesses ausgeben
             // WEXITSTATUS(status) gibt den Exitcode des Kindprozesses aus, falls dieser normal beendet wurde
         }
@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
             int signal = WTERMSIG(status);                                                  
             // Das Signal, das den Prozess beendet hat
             // WTERMSIG(status) gibt das Signal aus, das den Kindprozess beendet hat
-            printf("Process terminated by signal %d (%s)\n", signal, strsignal(signal));    
+            printf("Prozess durch Signal %d beendet: %s\n", signal, strsignal(signal));
             // Ausgabe des Signals und seiner Beschreibung
             // strsignal(signal) gibt die Bezeichnung des Signals aus, das den Kindprozess beendet hat
         }
