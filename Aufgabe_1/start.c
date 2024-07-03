@@ -4,6 +4,7 @@
 #include <sys/types.h>      // Für Datentyp pid_t 
 #include <sys/resource.h>   // Für die Funktion setpriority()
 #include <sys/wait.h>       // Für die Funktion waitpid() und Makros zur Statusüberprüfung
+#include <string.h>         // Für die Funktion strsignal()
 
 /**
  * Hauptfunktion, die einen Kindprozess erstellt und ein angegebenes Programm mit Argumenten ausführt.
@@ -44,7 +45,7 @@ int main(int argc, char **argv) {
         }
         // Das Programm mit den angegebenen Argumenten ausführen
         execvp(argv[1], &argv[1]);                                                          
-        if (execvp(argv[1], &args[1]) < 0) {                                               
+        if (execvp(argv[1], &argv[1]) < 0) {                                               
             // Fehlermeldung ausgeben, falls execvp fehlschlägt
             // Dies wird durch einen Rückgabewert kleiner als 0 signalisiert, welcher z.B. durch einen Fehler bei der Ausführung des Programms entstehen kann 
             // Z.B. ungültiger Dateipfad, fehlende Berechtigungen, etc.
@@ -56,7 +57,8 @@ int main(int argc, char **argv) {
         // Ansonsten handelt es sich um den Elternprozess
         int status;                                                                         
         // Variable zum Speichern des Status des Kindprozesses
-        printf("Prozess %d wurde gestartet\n", pid);                                                
+        printf("Prozess %d wurde gestartet\n", pid);  
+        printf("Priorität des Kindprozesses: %d\n", getpriority(PRIO_PROCESS, pid));                                              
         // Die PID des gestarteten Kindprozesses ausgeben
 
         if (waitpid(pid, &status, 0) < 0) {                                                 
