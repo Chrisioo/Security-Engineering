@@ -7,7 +7,7 @@
 #include <string.h>         // Für die Funktion strsignal()
 
 /**
- * Hauptfunktion, die einen Kindprozess erstellt und ein angegebenes Programm mit Argumenten ausführt.
+ * Hauptfunktion, die einen Kindprozess mit einem übergebenen Programm startet
  * @param argc die Anzahl der Befehlszeilenargumente
  * @param argv ein Array von Zeichenketten, das die Befehlszeilenargumente enthält
  * @return EXIT_SUCCESS bei erfolgreicher Ausführung, andernfalls EXIT_FAILURE
@@ -68,24 +68,23 @@ int main(int argc, char **argv) {
             // Stellt sicher, dass der Elternprozess Informationen über die Beendigung des Kindprozesses erhalten kann
             perror("waitpid");                                                              
             // Fehlermeldung ausgeben, falls waitpid fehlschlägt
+            // Programm wird mit Fehlercode beendet
+            // Mögliche Ursachen dafür sind z.B. Empfangen eines Signals, das den waitpid-Aufruf unterbrochen hat oder
+            // der Kindprozess bereits beendet wurde und dabei von einem anderen waitpid-Aufruf behandelt wurde
             exit(EXIT_FAILURE);                                                             
             // Programm beenden mit Fehlercode
         }
         if (WIFEXITED(status)) {                                                            
-            // Überprüfen, ob der Prozess normal beendet wurde
-            // WIFEXITED(status) prüft, ob der Kindprozess normal beendet wurde
+            // WIFEXITED(status) ist ein Boolean, überprüft ob der Prozess normal beendet wurde
             printf("Exit-Code: %d\n", WEXITSTATUS(status));                               
             // Den Rückgabecode des Prozesses ausgeben
-            // WEXITSTATUS(status) gibt den Exitcode des Kindprozesses aus, falls dieser normal beendet wurde
+            // WEXITSTATUS(status) ist ein Integer, gibt den Exitcode des Kindprozesses aus, falls dieser normal beendet wurde
         }
         if (WIFSIGNALED(status)) {                                                          
-            // Prüfen, ob der Prozess durch ein Signal beendet wurde
-            // WIFSIGNALED(status) prüft, ob der Kindprozess durch ein Signal beendet wurde
+            // WIFSIGNALED(status) ist ein Boolean, prüft, ob der Kindprozess durch ein Signal beendet wurde
             int signal = WTERMSIG(status);                                                  
-            // Das Signal, das den Prozess beendet hat
-            // WTERMSIG(status) gibt das Signal aus, das den Kindprozess beendet hat
+            // WTERMSIG(status) ist ein Integer, gibt das Signal aus, das den Kindprozess beendet hat
             printf("Prozess durch Signal %d beendet: %s\n", signal, strsignal(signal));
-            // Ausgabe des Signals und seiner Beschreibung
             // strsignal(signal) gibt die Bezeichnung des Signals aus, das den Kindprozess beendet hat
         }
     }

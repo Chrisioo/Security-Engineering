@@ -1,0 +1,7 @@
+Erfolgreiche Kommandos
+    - ./start ls -l: Gibt erfolgreich alle Dateien im aktuellen Verzeichnis aus, inklusive Berechtigungen, Besitzer, Dateigröße, Zeitpunkt der letzten Änderung und Dateinamen
+    - ./start echo &PATH: gibt alle in PATH gespeicherten Ordner aus
+
+Fehlerfälle
+    - ./start: Gibt "Nutzung: %s <Programm> <Argumente>" aus, da keine Startargumente übermittelt wurden
+    - ./start office: Gibt "execvp: No such file or directory" aus, da in keinem der PATH-Ordner ein Programm mit dem Namen "office" verfügbar ist
