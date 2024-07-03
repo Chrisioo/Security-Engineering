@@ -47,6 +47,8 @@ int main(int argc, char **argv) {
         execvp(argv[1], &argv[1]);                                                          
         if (execvp(args[1], &args[1]) < 0) {                                               
             // Fehlermeldung ausgeben, falls execvp fehlschlägt
+            // Dies wird durch einen Rückgabewert kleiner als 0 signalisiert, welcher z.B. durch einen Fehler bei der Ausführung des Programms entstehen kann 
+            // Z.B. ungültiger Dateipfad, fehlende Berechtigungen, etc.
             perror("execvp");                                                               
             // Kindprozess beenden mit Fehlercode
             exit(EXIT_FAILURE);                                                             
