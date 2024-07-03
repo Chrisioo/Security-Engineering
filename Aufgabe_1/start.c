@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
         }
         // Das Programm mit den angegebenen Argumenten ausführen
         execvp(argv[1], &argv[1]);                                                          
-        if (execvp(args[1], &args[1]) < 0) {                                               
+        if (execvp(argv[1], &args[1]) < 0) {                                               
             // Fehlermeldung ausgeben, falls execvp fehlschlägt
             // Dies wird durch einen Rückgabewert kleiner als 0 signalisiert, welcher z.B. durch einen Fehler bei der Ausführung des Programms entstehen kann 
             // Z.B. ungültiger Dateipfad, fehlende Berechtigungen, etc.
