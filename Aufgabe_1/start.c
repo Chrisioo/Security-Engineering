@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
 
     // Starten eines neuen Prozesses mittels fork()
     pid_t pid = fork();                                                                     
-    // pid_t = Prozess-ID, wird verwendet, dieser Wert wird von fork() zurückgegeben und genutzt, um festzustellen, ob der Prozess erfolgreich erstellt wurde
+    // pid_t = Prozess-ID, die durch fork() zurückgegeben wird und verwendet wird, um den Prozess zu identifizieren
     // Der Wert von pid wird durch die PID des durch fork erzeugten Prozess gesetzt                                                                                       
 
     // Überprüfen, ob fork() fehlgeschlagen ist
@@ -32,7 +32,6 @@ int main(int argc, char **argv) {
         perror("fork");                    
         // Programm mit Fehlercode EXIT_FAILURE beenden                                                 
         exit(EXIT_FAILURE);    
-
         // Überprüfen, ob fork() erfolgreich war                                                              
     } else if (pid == 0) {                                                                  
         // Kindprozess: Der Rückgabewert von fork() ist 0 im Kindprozess
