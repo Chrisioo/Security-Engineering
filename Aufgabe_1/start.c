@@ -12,45 +12,47 @@
  * @return EXIT_SUCCESS bei erfolgreicher Ausführung, andernfalls EXIT_FAILURE
  */
 int main(int argc, char **argv) {
-    // Überprüfen, ob genügend Argumente übergeben wurden
+    // Überprüfen, ob mindestens ein Argument übergeben wurde
     if (argc < 2) {              
-        // Fehlermeldung ausgeben falls nicht
+        // Fehlermeldung ausgeben, falls keine Argumente übergeben wurden
         fprintf(stderr, "usage: %s <program> <arguments>\n", argv[0]);     
         // Programm mit Fehlercode EXIT_FAILURE beenden                 
         exit(EXIT_FAILURE);                                                                 
     }
 
-    // Einen neuen Prozess mittels fork() erstellen
+    // Starten eines neuen Prozesses mittels fork()
     pid_t pid = fork();                                                                     
-    // pid_t = Prozessidentifikator, wird verwendet, um festzustellen, ob ein Prozess erfolgreich erstellt wurde
+    // pid_t = Prozess-ID, wird verwendet, dieser Wert wird von fork() zurückgegeben und genutzt, um festzustellen, ob der Prozess erfolgreich erstellt wurde
     // Der Wert von pid wird durch die PID des durch fork erzeugten Prozess gesetzt                                                                                       
 
     // Überprüfen, ob fork() fehlgeschlagen ist
     // In diesem Fall wird eine PID kleiner als 0 geliefert
     if (pid < 0) {                                                                          
-    // Fehlermeldung ausgeben, falls fork() fehlgeschlagen ist                                                                               
-    perror("fork");                    
-    // Programm mit Fehlercode EXIT_FAILURE beenden                                                 
-    exit(EXIT_FAILURE);    
+        // Fehlermeldung ausgeben, falls fork() fehlgeschlagen ist                                                                               
+        perror("fork");                    
+        // Programm mit Fehlercode EXIT_FAILURE beenden                                                 
+        exit(EXIT_FAILURE);    
 
-    // Überprüfen, ob fork() erfolgreich war                                                              
+        // Überprüfen, ob fork() erfolgreich war                                                              
     } else if (pid == 0) {                                                                  
-    // Kindprozess: Der Rückgabewert von fork() ist 0 im Kindprozess
-    if (setpriority(PRIO_PROCESS, 0, 19) < 0) {                                         
-        // Priorität des Kindprozesses auf 19 setzen -> niedrige Priorität
-        // Fehlermeldung ausgeben, falls setpriority fehlschlägt
-        perror("setpriority");                                                          
-        // Kindprozess beenden mit Fehlercode
-        exit(EXIT_FAILURE);                                                             
-    }
-    // Das Programm mit den angegebenen Argumenten ausführen
-    execvp(argv[1], &argv[1]);                                                          
-    // Fehlermeldung ausgeben, falls execvp fehlschlägt
-    perror("execvp");                                                                   
-    // Kindprozess beenden mit Fehlercode
-    exit(EXIT_FAILURE);                                                                 
+        // Kindprozess: Der Rückgabewert von fork() ist 0 im Kindprozess
+        if (setpriority(PRIO_PROCESS, 0, 19) < 0) {                                         
+            // Priorität des Kindprozesses auf 19 setzen -> niedrige Priorität
+            // Fehlermeldung ausgeben, falls setpriority fehlschlägt
+            perror("setpriority");                                                          
+            // Kindprozess beenden mit Fehlercode
+            exit(EXIT_FAILURE);                                                             
+        }
+        // Das Programm mit den angegebenen Argumenten ausführen
+        execvp(argv[1], &argv[1]);                                                          
+        if (execvp(args[1], &args[1]) < 0) {                                               
+            // Fehlermeldung ausgeben, falls execvp fehlschlägt
+            perror("execvp");                                                               
+            // Kindprozess beenden mit Fehlercode
+            exit(EXIT_FAILURE);                                                             
+        }
     } else {                                                                                
-        // Elternprozess
+        // Ansonsten handelt es sich um den Elternprozess
         int status;                                                                         
         // Variable zum Speichern des Status des Kindprozesses
         printf("Process %d started\n", pid);                                                
@@ -59,6 +61,7 @@ int main(int argc, char **argv) {
         if (waitpid(pid, &status, 0) < 0) {                                                 
             // Auf das Ende des Kindprozesses warten
             // waitpid() sorgt dafür, dass der Elternprozess auf das Ende des Kindprozesses wartet
+            // Wird statt wait() genutzt, da waitpid() auf spezifische Kindprozesse warten kann, wait() wartet auf beliebige Kindprozesse
             // Stellt sicher, dass der Elternprozess Informationen über die Beendigung des Kindprozesses erhalten kann
             perror("waitpid");                                                              
             // Fehlermeldung ausgeben, falls waitpid fehlschlägt

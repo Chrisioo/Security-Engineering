@@ -30,7 +30,6 @@ void ex_semop(int sem_id, int sem_num, int sem_op) {
     struct sembuf sop; 															// Struktur für Semaphore-Operationen
     sop.sem_num = sem_num; 														// Nummer des Semaphors in der Semaphore-Gruppe
     sop.sem_op = sem_op; 														// Operation, die auf dem Semaphor ausgeführt wird
-    sop.sem_flg = 0; 															// Keine speziellen Flags gesetzt
     if (semop(sem_id, &sop, 1) == -1) { 										// Ausführen der Semaphore-Operation
         perror("semop error"); 													// Fehlermeldung ausgeben, falls semop fehlschlägt
         exit(EXIT_FAILURE); 													// Programm beenden bei Fehler
