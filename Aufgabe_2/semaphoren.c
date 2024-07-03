@@ -13,6 +13,8 @@
  * Union für Semaphoren
  * Unionen dienen dazu, Speicherplatz zu sparen, da nur ein Feld zur gleichen Zeit verwendet wird
  * Gleichzeitig werden alle Felder an der gleichen Speicheradresse gespeichert
+ * 
+ * Semaphoren sind Zähler, die mehreren Prozessen den Zugriff auf gemeinsam genutzte Ressourcen ermöglichen
  */
 union semaphor {
     int value;
