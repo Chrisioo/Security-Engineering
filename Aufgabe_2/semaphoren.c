@@ -11,6 +11,11 @@
 #define N_DATA 2000000                  // Anzahl der Daten, die erzeugt und konsumiert werden
 #define N_SHARED 2000                   // Größe des Shared Memory Puffers
 
+/**
+ * Semaphore sind globale Signalflags im System, mit denen sich gegenseitig ausschließende Ressourcen festgelegt werden können.
+ * Sie können dazu genutzt werden, bestimmte Prozesse warten zu lassen, bis andere Prozesse abgeschlossen sind.
+ */
+
 // Definition einer Union für die Semaphore-Operationen
 // Unions werden verwendet, um Speicherplatz zu sparen, da nur ein Feld zur gleichen Zeit verwendet wird
 // Gleichzeitig wird die gleiche Speicheradresse für alle Felder verwendet
