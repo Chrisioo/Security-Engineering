@@ -11,6 +11,10 @@
 #define N_DATA 2000000                  // Anzahl der Daten, die erzeugt und konsumiert werden
 #define N_SHARED 2000                   // Größe des Shared Memory Puffers
 
+void semaphore_wait(int sem_id, int sem_num);   // Funktion für die P-Operation auf einer Semaphore
+void semaphore_signal(int sem_id, int sem_num); // Funktion für die V-Operation auf einer Semaphore
+void cleanup(int shm_id, int sem_id);           // Funktion zum Bereinigen von Shared Memory und Semaphoren
+
 /**
  * Semaphore sind globale Signalflags im System, mit denen sich gegenseitig ausschließende Ressourcen festgelegt werden können.
  * Sie können dazu genutzt werden, bestimmte Prozesse warten zu lassen, bis andere Prozesse abgeschlossen sind.
@@ -30,7 +34,7 @@ void semaphore_wait(int sem_id, int sem_num) {
     struct sembuf sembuf;                   // Struktur für Semaphore-Operationen
     sembuf.sem_num = sem_num;               // Nummer der Semaphore im Set
     sembuf.sem_op = -1;                     // P-Operation (decrement)
-    semop(sem_id, &sembuf, 1);              // Ausführen der Semaphore-Operation, 1 = Anzahl der Operationen
+    semop(sem_id, &sembuf, 1);              // Ausführen der Semaphore-Operation
 }
 
 // Funktion für die V-Operation (Signalisieren) auf einer Semaphore
@@ -38,7 +42,7 @@ void semaphore_signal(int sem_id, int sem_num) {
     struct sembuf sembuf;                   // Struktur für Semaphore-Operationen
     sembuf.sem_num = sem_num;               // Nummer der Semaphore im Set
     sembuf.sem_op = 1;                      // V-Operation (increment)
-    semop(sem_id, &sembuf, 1);              // Ausführen der Semaphore-Operation, 1 = Anzahl der Operationen
+    semop(sem_id, &sembuf, 1);              // Ausführen der Semaphore-Operation
 }
 
 // Funktion zum Bereinigen von Shared Memory und Semaphoren
@@ -113,7 +117,7 @@ int main() {
     // sem_union: Union für die Semaphore-Operationen
     // Prüfen, ob das Setzen des Werts erfolgreich war
     if (semctl(sem_id, 0, SETVAL, sem_union) < 0) {
-        perror("semctl");               // Fehlermeldung, falls das Setzen des Werts fehlschlägt
+        perror("Fehler beim Initialisieren von Semaphore 0"); // Fehlermeldung, falls das Initialisieren fehlschlägt
         exit(EXIT_FAILURE);             // Programmabbruch bei Fehler
     }
 
@@ -125,7 +129,7 @@ int main() {
     // Prüfen, ob das Setzen des Werts erfolgreich war
     sem_union.val = 1;                  // Initial S2: Schreiben erlaubt
     if (semctl(sem_id, 1, SETVAL, sem_union) < 0) {
-        perror("semctl");               // Fehlermeldung, falls das Setzen des Werts fehlschlägt
+        perror("Fehler beim Initialisieren von Semaphore 1"); // Fehlermeldung, falls das Initialisieren fehlschlägt
         exit(EXIT_FAILURE);             // Programmabbruch bei Fehler
     }
 
