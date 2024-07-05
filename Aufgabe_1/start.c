@@ -6,8 +6,9 @@
 #include <sys/wait.h>       // Für die Funktion waitpid() und Makros zur Statusüberprüfung
 #include <string.h>         // Für die Funktion strsignal()
 
+#define LOWEST_PRIORITY 19  // Niedrigste Priorität für Kindprozesse
 /**
- * Hauptfunktion, die einen Kindprozess mit einem übergebenen Programm startet
+ * Hauptfunktion, die einen Kindprozess erstellt und ein angegebenes Programm mit Argumenten ausführt.
  * @param argc die Anzahl der Befehlszeilenargumente
  * @param argv ein Array von Zeichenketten, das die Befehlszeilenargumente enthält
  * @return EXIT_SUCCESS bei erfolgreicher Ausführung, andernfalls EXIT_FAILURE
@@ -36,7 +37,7 @@ int main(int argc, char **argv) {
         // Überprüfen, ob fork() erfolgreich war                                                              
     } else if (pid == 0) {                                                                  
         // Kindprozess: Der Rückgabewert von fork() ist 0 im Kindprozess
-        if (setpriority(PRIO_PROCESS, 0, 19) < 0) {                                         
+        if (setpriority(PRIO_PROCESS, 0, LOWEST_PRIORITY) < 0) {                                         
             // Priorität des Kindprozesses auf 19 setzen -> niedrige Priorität
             // Fehlermeldung ausgeben, falls setpriority fehlschlägt
             perror("setpriority");                                                          
@@ -45,22 +46,14 @@ int main(int argc, char **argv) {
         }
         // Das Programm mit den angegebenen Argumenten ausführen
         execvp(argv[1], &argv[1]);                                                          
-        if (execvp(argv[1], &argv[1]) < 0) {                                               
-            // Fehlermeldung ausgeben, falls execvp fehlschlägt
-            // Dies wird durch einen Rückgabewert kleiner als 0 signalisiert, welcher z.B. durch einen Fehler bei der Ausführung des Programms entstehen kann 
-            // Z.B. ungültiger Dateipfad, fehlende Berechtigungen, etc.
-            perror("execvp");                                                               
-            // Kindprozess beenden mit Fehlercode
-            exit(EXIT_FAILURE);                                                             
-        }
-    } else {                                                                                
-        // Ansonsten handelt es sich um den Elternprozess
+        perror("execvp");
+        exit(EXIT_FAILURE);
+    } else {    // Ansonsten handelt es sich um den Elternprozess                                                       
         int status;                                                                         
         // Variable zum Speichern des Status des Kindprozesses
-        printf("Prozess %d wurde gestartet\n", pid);  
+        printf("Kindprozess %d wurde gestartet\n", pid);  
         printf("Priorität des Kindprozesses: %d\n", getpriority(PRIO_PROCESS, pid));                                              
         // Die PID des gestarteten Kindprozesses ausgeben
-
         if (waitpid(pid, &status, 0) < 0) {                                                 
             // Auf das Ende des Kindprozesses warten
             // waitpid() sorgt dafür, dass der Elternprozess auf das Ende des Kindprozesses wartet
@@ -68,25 +61,29 @@ int main(int argc, char **argv) {
             // Stellt sicher, dass der Elternprozess Informationen über die Beendigung des Kindprozesses erhalten kann
             perror("waitpid");                                                              
             // Fehlermeldung ausgeben, falls waitpid fehlschlägt
-            // Programm wird mit Fehlercode beendet
-            // Mögliche Ursachen dafür sind z.B. Empfangen eines Signals, das den waitpid-Aufruf unterbrochen hat oder
-            // der Kindprozess bereits beendet wurde und dabei von einem anderen waitpid-Aufruf behandelt wurde
             exit(EXIT_FAILURE);                                                             
             // Programm beenden mit Fehlercode
         }
         if (WIFEXITED(status)) {                                                            
-            // WIFEXITED(status) ist ein Boolean, überprüft ob der Prozess normal beendet wurde
+            // Überprüfen, ob der Prozess normal beendet wurde
+            // WIFEXITED(status) prüft, ob der Kindprozess normal beendet wurde
             printf("Exit-Code: %d\n", WEXITSTATUS(status));                               
             // Den Rückgabecode des Prozesses ausgeben
-            // WEXITSTATUS(status) ist ein Integer, gibt den Exitcode des Kindprozesses aus, falls dieser normal beendet wurde
-        }
-        if (WIFSIGNALED(status)) {                                                          
-            // WIFSIGNALED(status) ist ein Boolean, prüft, ob der Kindprozess durch ein Signal beendet wurde
+            // WEXITSTATUS(status) gibt den Exitcode des Kindprozesses aus, falls dieser normal beendet wurde
+        } else if (WIFSIGNALED(status)) {                                                          
+            // Prüfen, ob der Prozess durch ein Signal beendet wurde
+            // WIFSIGNALED(status) prüft, ob der Kindprozess durch ein Signal beendet wurde
             int signal = WTERMSIG(status);                                                  
-            // WTERMSIG(status) ist ein Integer, gibt das Signal aus, das den Kindprozess beendet hat
+            // Das Signal, das den Prozess beendet hat
+            // WTERMSIG(status) gibt das Signal aus, das den Kindprozess beendet hat
             printf("Prozess durch Signal %d beendet: %s\n", signal, strsignal(signal));
+            // Ausgabe des Signals und seiner Beschreibung
             // strsignal(signal) gibt die Bezeichnung des Signals aus, das den Kindprozess beendet hat
-        }
+        } else if (WIFSTOPPED(status)) {
+            // Mit Hilfe von WIFSTOPPED(status) wird überprüft, ob der Kindprozess gestoppt wurde
+            // Ausgabe, dass der Kindprozess gestoppt wurde
+            printf("Kindprozess wurde durch Signal %d gestoppt\n", WSTOPSIG(status));
+        } 
     }
     exit(EXIT_SUCCESS);                                                                     
     // Programm erfolgreich beenden
