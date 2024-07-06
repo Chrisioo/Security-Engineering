@@ -150,7 +150,7 @@ int main() {
                 // Prüfen, ob nur so viele Daten gelesen werden, wie vorhanden sind
                 if (i + j < N_DATA) {
                     // Ausgabe der gelesenen Daten
-                    printf("P2 liest: %d\n", shared_memory[j]);
+                    printf("P2 liest auf Position [%d]: %d\n", i + j + 1, shared_memory[j]);
                 }
             }
 
@@ -172,7 +172,7 @@ int main() {
                     // Prüfen, ob nur so viele Daten geschrieben werden, wie Platz im Shared Memory Puffer ist
                     shared_memory[j] = lrand48(); // Schreiben einer Zufallszahl in den Shared Memory
                     // Ausgabe der geschriebenen Daten
-                    printf("P1 schreibt: %d\n", shared_memory[j]);
+                    printf("P1 schreibt auf Position [%d]: %d\n", i + j + 1, shared_memory[j]);
                 }
             }
 
