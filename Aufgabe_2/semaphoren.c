@@ -29,6 +29,7 @@ union semun {
 };
 
 // Funktion für die P-Operation (Warten) auf einer Semaphore
+// Signal -1 auf einer Semaphore bedeutet, dass der Wert der Semaphore um 1 verringert wird und der Prozess auf die Ressource wartet
 void semaphore_wait(int sem_id, int sem_num) {
     struct sembuf sembuf;                   // Struktur für Semaphore-Operationen
     sembuf.sem_num = sem_num;               // Nummer der Semaphore im Set
@@ -37,6 +38,7 @@ void semaphore_wait(int sem_id, int sem_num) {
 }
 
 // Funktion für die V-Operation (Signalisieren) auf einer Semaphore
+// Signal 1 auf einer Semaphore bedeutet, dass der Wert der Semaphore um 1 erhöht wird und der Prozess die Ressource freigibt
 void semaphore_signal(int sem_id, int sem_num) {
     struct sembuf sembuf;                   // Struktur für Semaphore-Operationen
     sembuf.sem_num = sem_num;               // Nummer der Semaphore im Set
