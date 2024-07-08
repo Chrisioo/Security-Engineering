@@ -21,8 +21,7 @@ void cleanup(int shm_id, int sem_id);           // Funktion zum Bereinigen von S
  */
 
 // Definition einer Union für die Semaphore-Operationen
-// Unions werden verwendet, um Speicherplatz zu sparen, da nur ein Feld zur gleichen Zeit verwendet wird
-// Gleichzeitig wird die gleiche Speicheradresse für alle Felder verwendet
+// Bei Unions wird der selbe Speicherplatz für alle Elemente genutzt
 union semun {
     int val;                            // Wert, der über SETVAL gesetzt wird
     struct semid_ds *buf;               // Buffer für IPC_STAT und IPC_SET
@@ -67,8 +66,8 @@ void cleanup(int shm_id, int sem_id) {
 int main() {
     int shm_id, sem_id;                 // IDs für Shared Memory und Semaphoren
     int *shared_memory;                 // Pointer auf Shared Memory
-    pid_t pid;                          // Prozess-ID
-    key_t key = IPC_PRIVATE;            // Generieren eines eindeutigen Schlüssels
+    pid_t pid;                          // Prozess-ID, Datentyp pid_t / Integer
+    key_t key = IPC_PRIVATE;            // Generieren eines eindeutigen Schlüssels mit IPC_PRIVATE, Datentyp key_t / Integer
 
     // Shared Memory anlegen
     // key: Schlüssel für das Shared Memory Segment
@@ -77,7 +76,7 @@ int main() {
     shm_id = shmget(key, N_SHARED * sizeof(int), 0666 | IPC_CREAT);
     // Prüfen, ob das Anlegen des Shared Memory erfolgreich war
     if (shm_id < 0) {
-        perror("shmget");               // Fehlermeldung, falls das Anlegen fehlschlägt
+        perror("shmget");               // Fehlermeldung, falls das Anlegen fehlschlägt, in diesem Fall wird ein Wert < 0 zurückgegeben
         exit(EXIT_FAILURE);             // Programmabbruch bei Fehler
     }
 
@@ -90,7 +89,7 @@ int main() {
     shared_memory = (int *)shmat(shm_id, NULL, 0);
     // Prüfen, ob das Anhängen des Shared Memory erfolgreich war
     if (shared_memory == (int *) -1) {
-        perror("shmat");                // Fehlermeldung, falls das Anhängen fehlschlägt
+        perror("shmat");                // Fehlermeldung, falls das Anhängen fehlschlägt, in diesem Fall wird ein Wert -1 zurückgegeben
         exit(EXIT_FAILURE);             // Programmabbruch bei Fehler
     }
 
@@ -101,7 +100,7 @@ int main() {
     sem_id = semget(key, 2, 0666 | IPC_CREAT);
     // Prüfen, ob das Anlegen des Semaphore Sets erfolgreich war
     if (sem_id < 0) {
-        perror("semget");               // Fehlermeldung, falls das Anlegen fehlschlägt
+        perror("semget");               // Fehlermeldung, falls das Anlegen fehlschlägt, in diesem Fall wird ein Wert < 0 zurückgegeben
         shmdt(shared_memory);           // Shared Memory ablösen
         exit(EXIT_FAILURE);             // Programmabbruch bei Fehler
     }
@@ -117,8 +116,8 @@ int main() {
     // sem_union: Union für die Semaphore-Operationen
     // Prüfen, ob das Setzen des Werts erfolgreich war
     if (semctl(sem_id, 0, SETVAL, sem_union) < 0) {
-        perror("Fehler beim Initialisieren von Semaphore 0"); // Fehlermeldung, falls das Initialisieren fehlschlägt
-        exit(EXIT_FAILURE);             // Programmabbruch bei Fehler
+        perror("Fehler beim Initialisieren von Semaphore 0");   // Fehlermeldung, falls das Initialisieren fehlschlägt, in diesem Fall wird ein Wert < 0 zurückgegeben
+        exit(EXIT_FAILURE);                                     // Programmabbruch bei Fehler
     }
 
     // semctl: Funktion für Semaphore-Operationen, wird zum setzen eines Wertes verwendet
@@ -129,18 +128,18 @@ int main() {
     // Prüfen, ob das Setzen des Werts erfolgreich war
     sem_union.val = 1;                  // Initial S2: Schreiben erlaubt
     if (semctl(sem_id, 1, SETVAL, sem_union) < 0) {
-        perror("Fehler beim Initialisieren von Semaphore 1"); // Fehlermeldung, falls das Initialisieren fehlschlägt
-        exit(EXIT_FAILURE);             // Programmabbruch bei Fehler
+        perror("Fehler beim Initialisieren von Semaphore 1");   // Fehlermeldung, falls das Initialisieren fehlschlägt, in diesem Fall wird ein Wert < 0 zurückgegeben
+        exit(EXIT_FAILURE);                                     // Programmabbruch bei Fehler
     }
 
     // Prozess P1 erzeugt den Kindprozess P2
     // pid ist 0 im Kindprozess und die Prozess-ID des Kindprozesses im Elternprozess   
     pid = fork();
     // Prüfen, ob das Erzeugen des Prozesses erfolgreich war
-    if (pid < 0) {                      // Wenn pid < 0, dann ist ein Fehler aufgetreten    
-        perror("fork");                 // Fehlermeldung, falls das Erzeugen des Prozesses fehlschlägt
-        exit(EXIT_FAILURE);             // Programmabbruch bei Fehler
-    } else if (pid == 0) {              // Wenn pid = 0, dann handelt es sich um den Kindprozess    
+    if (pid < 0) {                                              // Wenn pid < 0, dann ist ein Fehler aufgetreten    
+        perror("fork");                                         // Fehlermeldung, falls das Erzeugen des Prozesses fehlschlägt
+        exit(EXIT_FAILURE);                                     // Programmabbruch bei Fehler
+    } else if (pid == 0) {                                      // Wenn pid = 0, dann handelt es sich um den Kindprozess    
         // Kindprozess P2 (Verbraucher)
         // Schleife über alle Daten in Schritten der Größe N_SHARED
         for (int i = 0; i < N_DATA; i += N_SHARED) {
@@ -162,7 +161,9 @@ int main() {
         exit(EXIT_SUCCESS);             // Erfolgreiches Programmende
     } else {
         // Vaterprozess P1 (Erzeuger)
-        srand48(time(NULL));            // Initialisieren des Zufallszahlengenerators
+        // Initialisieren des Zufallszahlengenerators
+        // Wird mit der aktuellen Zeit initialisiert, um bei jedem Programmstart unterschiedliche Zufallszahlen zu erhalten
+        srand48(time(NULL));            
         // Schleife über alle Daten in Schritten der Größe N_SHARED
         for (int i = 0; i < N_DATA; i += N_SHARED) {
             semaphore_wait(sem_id, 1);  // Warten auf Freigabe durch P2 (S2)
@@ -170,7 +171,7 @@ int main() {
             for (int j = 0; j < N_SHARED; ++j) {
                 if (i + j < N_DATA) {
                     // Prüfen, ob nur so viele Daten geschrieben werden, wie Platz im Shared Memory Puffer ist
-                    shared_memory[j] = lrand48(); // Schreiben einer Zufallszahl in den Shared Memory
+                    shared_memory[j] = lrand48(); // Schreiben einer Zufallszahl in den Shared Memory Platz j
                     // Ausgabe der geschriebenen Daten
                     printf("P1 schreibt auf Position [%d]: %d\n", i + j + 1, shared_memory[j]);
                 }
