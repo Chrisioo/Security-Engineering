@@ -24,11 +24,9 @@ int main(int argc, char **argv) {
 
     // Starten eines neuen Prozesses mittels fork()
     pid_t pid = fork();                                                                     
-    // pid_t = Prozess-ID, die durch fork() zurückgegeben wird und verwendet wird, um den Prozess zu identifizieren
-    // Wird durch die PID des durch fork erzeugten Prozess gesetzt                                                                                       
+    // pid_t = Prozess-ID, die durch fork() zurückgegeben wird und verwendet wird, um den Prozess zu identifizieren                                                                                   
 
-    // Prüfen, ob fork() fehlgeschlagen ist
-    // Falls ja wird Wert < 0 zurückgegeben
+    // Prüfen, ob fork() fehlgeschlagen ist, in diesem Fall wird Wert < 0 zurückgegeben
     if (pid < 0) {                                                                          
         // Fehlermeldung ausgeben, falls fork() fehlgeschlagen ist                                                                               
         perror("fork");                    
