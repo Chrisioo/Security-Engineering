@@ -64,21 +64,18 @@ int main(int argc, char **argv) {
             // Programm beenden mit Fehlercode
         }
         if (WIFEXITED(status)) {                                                            
-            // Überprüfen, ob Prozess normal beendet wurde
             // WIFEXITED(status) prüft, ob der Kindprozess normal beendet wurde
-            printf("Exit-Code: %d\n", WEXITSTATUS(status));                               
-            // Rückgabecode des Prozesses ausgeben
             // WEXITSTATUS(status) gibt den Exitcode des Kindprozesses aus, falls dieser normal beendet wurde
+            printf("Exit-Code: %d\n", WEXITSTATUS(status));                               
         } else if (WIFSIGNALED(status)) {                                                          
             // Durch WIFSIGNALLED(status) prüfen, ob der Kindprozess durch ein Signal beendet wurde
             int signal = WTERMSIG(status);                                                  
             // WTERMSIG(status) gibt das Signal aus, das den Kindprozess beendet hat
             printf("Prozess durch Signal %d beendet: %s\n", signal, strsignal(signal));
-            // Ausgabe des Signals und seiner Beschreibung
             // strsignal(signal) gibt eine verständliche Bezeichnung des Signals aus, das den Kindprozess beendet hat
         } else if (WIFSTOPPED(status)) {
             // Durch WIFSTOPPED(status) prüfen, ob der Kindprozess gestoppt wurde
-            // Ausgabe, dass der Kindprozess gestoppt wurde
+            // Ausgabe des Signals, das den Kindprozess gestoppt hat durch WSTOPSIG(status)
             printf("Kindprozess wurde durch Signal %d gestoppt\n", WSTOPSIG(status));
         } 
     }
