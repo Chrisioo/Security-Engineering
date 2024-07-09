@@ -1,19 +1,15 @@
-#include <stdio.h>                      // Einbindung der Standard Input/Output Bibliothek
-#include <stdlib.h>                     // Einbindung der Standard Bibliothek für Speicherverwaltung, Prozesssteuerung und Konvertierungen
-#include <unistd.h>                     // Einbindung der POSIX-Bibliothek für Unix-Standardfunktionen
-#include <sys/types.h>                  // Einbindung der Bibliothek für grundlegende Datentypen
+#include <stdio.h>                      
+#include <stdlib.h>                     
+#include <unistd.h>                     
+#include <sys/types.h>                  
 #include <sys/ipc.h>                    // Einbindung der Bibliothek für Interprozesskommunikation (IPC)
 #include <sys/shm.h>                    // Einbindung der Bibliothek für Shared Memory
 #include <sys/sem.h>                    // Einbindung der Bibliothek für Semaphoren
 #include <sys/wait.h>                   // Einbindung der Bibliothek für Prozesssteuerung und Warten auf Prozesse
-#include <time.h>                       // Einbindung der Bibliothek für Zeitfunktionen
+#include <time.h>                       
 
 #define N_DATA 2000000                  // Anzahl der Daten, die erzeugt und konsumiert werden
 #define N_SHARED 2000                   // Größe des Shared Memory Puffers
-
-void semaphore_wait(int sem_id, int sem_num);   // Funktion für die P-Operation auf einer Semaphore
-void semaphore_signal(int sem_id, int sem_num); // Funktion für die V-Operation auf einer Semaphore
-void cleanup(int shm_id, int sem_id);           // Funktion zum Bereinigen von Shared Memory und Semaphoren
 
 /**
  * Semaphore sind globale Signalflags im System, mit denen sich gegenseitig ausschließende Ressourcen festgelegt werden können.
@@ -22,7 +18,7 @@ void cleanup(int shm_id, int sem_id);           // Funktion zum Bereinigen von S
 
 // Definition einer Union für die Semaphore-Operationen
 // Bei Unions wird der selbe Speicherplatz für alle Elemente genutzt
-union semun {
+union semunion {
     int val;                            // Wert, der über SETVAL gesetzt wird
     struct semid_ds *buf;               // Buffer für IPC_STAT und IPC_SET
     unsigned short *array;              // Array für GETALL und SETALL
@@ -109,7 +105,7 @@ int main() {
 
     // Semaphoren initialisieren
     // sem_union: Union für die Semaphore-Operationen
-    union semun sem_union;
+    union semunion sem_union;
     sem_union.val = 0;                  // Initial S1: Lesen verboten
     // semctl: Funktion für Semaphore-Operationen, wird zum setzen eines Wertes verwendet
     // sem_id: ID des Semaphore Sets
@@ -173,7 +169,7 @@ int main() {
             for (int j = 0; j < N_SHARED; ++j) {
                 if (i + j < N_DATA) {
                     // Prüfen, ob nur so viele Daten geschrieben werden, wie Platz im Shared Memory Puffer ist
-                    shared_memory[j] = lrand48(); // Schreiben einer Zufallszahl in den Shared Memory Platz j
+                    shared_memory[j] = lrand48();   // Zufällige Zahl schreiben
                     // Ausgabe der geschriebenen Daten
                     printf("P1 schreibt auf Position [%d]: %d\n", i + j + 1, shared_memory[j]);
                 }
