@@ -48,13 +48,19 @@ void semaphore_signal(int sem_id, int sem_num) {
 void cleanup(int shm_id, int sem_id) {
     // Shared Memory Segment löschen
     // Prüfen, ob das Löschen des Shared Memory erfolgreich war
+    // IPC_RMID: Flag zum Löschen des Shared Memory Segments
+    // NULL: Argumente für die Funktion shmctl
+    // Gibt -1 zurück, wenn das Löschen fehlschlägt
     if (shmctl(shm_id, IPC_RMID, NULL) == -1) { 
         perror("shmctl");               // Fehlermeldung, falls das Löschen fehlschlägt
         exit(EXIT_FAILURE);             // Programmabbruch bei Fehler
     }
 
-    // Semaphoren löschen
-    // Prüfen, ob das Löschen der Semaphoren erfolgreich war
+    // Semaphore löschen
+    // Prüfen, ob das Löschen der Semaphore erfolgreich war
+    // 0: Nummer der Semaphore im Set / sem_num
+    // IPC_RMID: Flag zum Löschen des Semaphore Sets
+    // Gibt -1 zurück, wenn das Löschen fehlschlägt
     if (semctl(sem_id, 0, IPC_RMID) == -1) {
         perror("semctl");               // Fehlermeldung, falls das Löschen fehlschlägt
         exit(EXIT_FAILURE);             // Programmabbruch bei Fehler
