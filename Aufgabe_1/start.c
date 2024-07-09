@@ -26,17 +26,8 @@ int main(int argc, char **argv) {
     pid_t pid = fork();                                                                     
     // pid_t = Prozess-ID, die durch fork() zurückgegeben wird und verwendet wird, um den Prozess zu identifizieren                                                                                   
 
-    // Prüfen, ob fork() fehlgeschlagen ist, in diesem Fall wird Wert < 0 zurückgegeben
-    if (pid < 0) {                                                                          
-        // Fehlermeldung ausgeben, falls fork() fehlgeschlagen ist                                                                               
-        perror("fork");                    
-        // Programm mit Fehlercode EXIT_FAILURE beenden                                                 
-        exit(EXIT_FAILURE);    
-
-        // Überprüfen, ob fork() erfolgreich war   
-        // Kindprozess bekommt Wert 0 als PID zugeordnet                                                           
-    } else if (pid == 0) {                                                                  
-        if (setpriority(PRIO_PROCESS, 0, LOWEST_PRIORITY) < 0) {                                         
+    if (pid == 0) {                                                                  
+        if (setpriority(PRIO_PROCESS, 0, LOWEST_PRIORITY) == -1) {                                         
             // Priorität des Kindprozesses auf 19 setzen -> niedrige Priorität
             // Fehlermeldung ausgeben, falls setpriority fehlschlägt
             perror("setpriority");                                                          

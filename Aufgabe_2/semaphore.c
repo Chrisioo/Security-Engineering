@@ -19,9 +19,9 @@
 // Definition einer Union für die Semaphore-Operationen
 // Bei Unions wird der selbe Speicherplatz für alle Elemente genutzt
 union semunion {
-    int val;                            // Wert, der über SETVAL gesetzt wird
-    struct semid_ds *buf;               // Buffer für IPC_STAT und IPC_SET
-    unsigned short *array;              // Array für GETALL und SETALL
+    int val;                                // Wert, der über SETVAL gesetzt wird
+    struct semid_ds *buf;                   // Buffer für IPC_STAT und IPC_SET
+    unsigned short *array;                  // Array für GETALL und SETALL
 };
 
 // Funktion für die P-Operation (Warten) auf einer Semaphore
@@ -35,7 +35,7 @@ void semaphore_wait(int sem_id, int sem_num) {
 
 // Funktion für die V-Operation (Signalisieren) auf einer Semaphore
 // Signal 1 auf einer Semaphore bedeutet, dass der Wert der Semaphore um 1 erhöht wird und der Prozess die Ressource freigibt
-void semaphore_signal(int sem_id, int sem_num) {
+void semaphore_signal (int sem_id, int sem_num) {
     struct sembuf sembuf;                   // Struktur für Semaphore-Operationen
     sembuf.sem_num = sem_num;               // Nummer der Semaphore im Set
     sembuf.sem_op = 1;                      // V-Operation (increment)
@@ -45,7 +45,7 @@ void semaphore_signal(int sem_id, int sem_num) {
 // Funktion zum Bereinigen von Shared Memory und Semaphoren
 // smh_id: ID des Shared Memory Segments
 // sem_id: ID des Semaphore Sets    
-void cleanup(int shm_id, int sem_id) {
+void cleanup (int shm_id, int sem_id) {
     // Shared Memory Segment löschen
     // Prüfen, ob das Löschen des Shared Memory erfolgreich war
     // IPC_RMID: Flag zum Löschen des Shared Memory Segments
