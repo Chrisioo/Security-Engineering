@@ -23,8 +23,8 @@ void set_limits () {
     limit.rlim_max = 1;
     setrlimit(RLIMIT_CPU, &limit);
 
-    limit.rlim_cur = 64 * 1024;
-    limit.rlim_max = 64 * 1024;
+    limit.rlim_cur = 1024;
+    limit.rlim_max = 1024;
     setrlimit(RLIMIT_STACK, &limit); 
 
     limit.rlim_cur = 1024;
@@ -33,25 +33,35 @@ void set_limits () {
 }
 
 int main () {
+    int input;
     signal(SIGXCPU, handle_signal);
     signal(SIGSEGV, handle_signal);
     signal(SIGXFSZ, handle_signal);
 
     set_limits();
 
-    // CPU time limit
-    while (1) {
-        // Stack size limit
-        char large_stack[1024 * 1024];
-
-        // File size limit
-        FILE *file = fopen("file.txt", "w");
-        if (file) {
-            for (int i = 0; i < 1024; i++) {
-                fprintf(file, "Exceeding file size limit!\n");
+    printf("1: Exceed CPU time limit\n");
+    printf("2: Exceed memory limit\n");
+    printf("3: Exceed file size limit\n");
+    scanf("%d", &input);
+    switch (input) {
+        case 1:
+            while (1) {}
+            break;
+        case 2:
+            while (1) {
+                malloc(1024);
+            }
+            break;
+        case 3:
+            FILE *file = fopen("file.txt", "w");
+            while (1) {
+                fputc('a', file);
             }
             fclose(file);
-        }
+            break;
+        default:
+            break;
     }
     exit(EXIT_SUCCESS);
 }
