@@ -5,34 +5,38 @@
 #include <sys/time.h>
 #include <signal.h>
 
-void handle_signal (int signal) {
+void handle_signal(int signal) {
     if (signal == SIGXCPU) {
-        printf("CPU time limit exceeded\n");
+        printf("CPU-Zeitlimit überschritten\n");
     } else if (signal == SIGSEGV) {
-        printf("Memory limit exceeded\n");
+        printf("Speicherlimit überschritten\n");
     } else if (signal == SIGXFSZ) {
-        printf("File size limit exceeded\n");
+        printf("Dateigrößenlimit überschritten\n");
     }
+    fflush(stdout);
     exit(EXIT_FAILURE);
 }
 
-void set_limits () {
+void set_limits() {
     struct rlimit limit;
 
+    // Setzen der CPU-Zeitgrenze auf 1 Sekunde
     limit.rlim_cur = 1;
     limit.rlim_max = 1;
     setrlimit(RLIMIT_CPU, &limit);
 
+    // Setzen der Stackgröße auf 1 KB
     limit.rlim_cur = 1024;
     limit.rlim_max = 1024;
-    setrlimit(RLIMIT_STACK, &limit); 
+    setrlimit(RLIMIT_STACK, &limit);
 
+    // Setzen der maximalen Dateigröße auf 1 KB
     limit.rlim_cur = 1024;
     limit.rlim_max = 1024;
     setrlimit(RLIMIT_FSIZE, &limit);
 }
 
-int main () {
+int main() {
     int input;
     signal(SIGXCPU, handle_signal);
     signal(SIGSEGV, handle_signal);
@@ -40,28 +44,35 @@ int main () {
 
     set_limits();
 
-    printf("1: Exceed CPU time limit\n");
-    printf("2: Exceed memory limit\n");
-    printf("3: Exceed file size limit\n");
+    printf("1: CPU-Zeitlimit überschreiten\n");
+    printf("2: Speicherlimit überschreiten\n");
+    printf("3: Dateigrößenlimit überschreiten\n");
+
     scanf("%d", &input);
     switch (input) {
         case 1:
-            while (1) {}
+            while (1) {
+                // Endlosschleife, um CPU-Zeitlimit zu überschreiten
+            }
             break;
         case 2:
             while (1) {
-                malloc(1024);
+                // Speicherlimit überschreiten durch Endlosschleife, in der Speicher allokiert wird 
+                void *ptr = malloc(4096); //  Allokieren von 4 KB Speicher
             }
             break;
         case 3:
-            FILE *file = fopen("file.txt", "w");
+            // Überschreiten des Dateigrößenlimits durch Schreiben in eine Datei
+            FILE *file = fopen("file.txt", "w");    // Öffnen der Datei im Schreibmodus
             while (1) {
-                fputc('a', file);
+                // Endlosschleife, um Dateigrößenlimit zu überschreiten 
+                fputc('a', file); // Schreiben in die Datei
             }
-            fclose(file);
+            fclose(file);   // Schließen der Datei
             break;
         default:
+            printf("Ungueltige Auswahl\n");
             break;
     }
-    exit(EXIT_SUCCESS);
+    return 0;
 }
