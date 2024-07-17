@@ -7,10 +7,13 @@
 
 void handle_signal(int signal) {
     if (signal == SIGXCPU) {
+        // SIGXCPU = Makro für Signal, das gesendet wird, wenn das CPU-Zeitlimit überschritten wird
         printf("CPU-Zeitlimit überschritten\n");
     } else if (signal == SIGSEGV) {
+        // SIGSEGV = Makro für Signal, das gesendet wird, wenn ein Speicherzugriffsfehler auftritt
         printf("Speicherlimit überschritten\n");
     } else if (signal == SIGXFSZ) {
+        // SIGXFSZ = Makro für Signal, das gesendet wird, wenn das Dateigrößenlimit überschritten wird
         printf("Dateigrößenlimit überschritten\n");
     }
     fflush(stdout);

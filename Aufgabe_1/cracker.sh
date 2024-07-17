@@ -19,10 +19,10 @@ while read -r word; do
 
         # Generate hash for the current word
         generated_hash=$(openssl passwd -1 -salt "$salt" "$word")
-        echo "Generated hash: $generated_hash for $word"
+        echo "Hash: $generated_hash, Wort: $word, salt: $salt ($username)"
         # Compare the generated hash with the target hash
         if [[ "$generated_hash" == *"$target_hash"* ]]; then
-            echo "Password for $username found: $word"
+            echo "Passwort für Nutzer $username: $word"
             FOUND_PASSWORDS["$username"]="$word"
             unset USERS["$username"]
         fi
@@ -36,12 +36,12 @@ done < "words.txt"
 
 # Output all usernames with their found passwords
 for username in "${!FOUND_PASSWORDS[@]}"; do
-    echo "Password for $username: ${FOUND_PASSWORDS[$username]}"
+    echo "Password für Nutzer $username: ${FOUND_PASSWORDS[$username]}"
 done
 
 # Output usernames for which passwords were not found
 for username in "${!USERS[@]}"; do
-    echo "Password for $username not found."
+    echo "Passwort für Nutzer $username wurde nicht gefunden."
 done
 
 exit 0
