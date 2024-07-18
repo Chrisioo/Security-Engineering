@@ -2,12 +2,12 @@
 
 # Überprüfen, ob alle benötigten Parameter angegeben wurden
 if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 <username> <number_of_tans>"
+    echo "Nutzung: $0 <Benutzername> <Anzahl TANs>"
     exit 1
 fi
 
-USERNAME=$1
-NUM_TANS=$2
+USERNAME=$1             # Benutzername = 1. Parameter  
+NUM_TANS=$2             # Anzahl TANs = 2. Parameter
 TAN_DIR="TAN"
 
 # Erstellen des Verzeichnisses für die TAN-Dateien, falls es nicht existiert
@@ -21,10 +21,10 @@ CURRENT_HASH=$(echo -n "$RANDOM_SEED" | sha256sum | awk '{print $1}')
 
 # Erzeugen der TAN-Liste
 TAN_LIST=()
-for (( i=0; i<$NUM_TANS; i++ )); do
-    NEXT_HASH=$(echo -n "$CURRENT_HASH" | sha256sum | awk '{print $1}')
-    TAN_LIST+=("$CURRENT_HASH")
-    CURRENT_HASH=$NEXT_HASH
+for (( i=0; i<$NUM_TANS; i++ )); do                                         # Durchlaufen der Anzahl TANs
+    NEXT_HASH=$(echo -n "$CURRENT_HASH" | sha256sum | awk '{print $1}')     # Berechnen des nächsten Hashwerts
+    TAN_LIST+=("$CURRENT_HASH")                                             # Hinzufügen des aktuellen Hashwerts zur TAN-Liste               
+    CURRENT_HASH=$NEXT_HASH                                                 # Aktualisieren des aktuellen Hashwerts
 done
 
 # Umkehren der TAN-Liste
