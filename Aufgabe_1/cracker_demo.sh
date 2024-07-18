@@ -4,8 +4,6 @@
 declare -A USERS
 USERS["Steffi.Jones"]='$1$O7v0C21Z$2FH7ib2Dxtoq6B83qTgON1'
 USERS["Marco.Reus"]='$1$Jebn3vQ5$2k..iqxtXNwfsCFAamWCS0'
-USERS["Almuth.Schult"]='$1$0ngrMRa1$uXLzWhnrYzmiRM3fi8Nde1'
-USERS["Manuel.Neuer"]='$1$1aaPttrp$VoF2rkOyC/tE.DxzQuuIY1'
 USERS["Birgit.Prinz"]='$1$7ieEwjFr$T/jwatbzqhLZNVDEfymB41'
 
 # Array zum Speichern der gefundenen Passwörter
@@ -30,7 +28,7 @@ while read -r word; do                                                      # Le
             break 2                                                         # Beende die Schleife, falls alle Passwörter gefunden wurden
         fi
     done
-done < "words.txt"
+done < "words_demo.txt"
 
 # Ausgabe aller Nutzer mit ihren gefundenen Passwörtern
 for username in "${!GEFUNDENE_PASSWOERTER[@]}"; do
