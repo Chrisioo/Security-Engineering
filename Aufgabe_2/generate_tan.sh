@@ -32,7 +32,10 @@ REVERSED_TAN_LIST=($(echo "${TAN_LIST[@]}" | tac -s ' '))
 
 # Speichern der TAN-Liste in der Datei
 TAN_FILE="$TAN_DIR/$USERNAME.tan"
-echo "${REVERSED_TAN_LIST[@]}" > "$TAN_FILE"
+:> "$TAN_FILE"
+for TAN in "${REVERSED_TAN_LIST[@]}"; do
+    echo "$TAN" >> "$TAN_FILE"
+done
 
 # Speichern des letzten Hashwerts (wird als erster aktueller Hashwert verwendet)
 CURRENT_HASH_FILE="$TAN_DIR/$USERNAME.hash"
