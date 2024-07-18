@@ -66,7 +66,7 @@ int main() {
             break;
         case 3:
             // Überschreiten des Dateigrößenlimits durch Schreiben in eine Datei
-            FILE *file = fopen("file.txt", "w");    // Öffnen der Datei im Schreibmodus
+            FILE *file = fopen("test.txt", "w");    // Öffnen der Datei im Schreibmodus
             while (1) {
                 // Endlosschleife, um Dateigrößenlimit zu überschreiten 
                 fputc('a', file); // Schreiben in die Datei
