@@ -25,22 +25,23 @@ while true; do
     # Berechnen des Hashwerts der eingegebenen TAN
     USER_TAN_HASH=$(echo -n "$USER_TAN" | sha256sum | awk '{print $1}')
 
-    if [ "$USER_TAN_HASH" == "$CURRENT_HASH" ]; then
+    if grep -q "$USER_TAN_HASH" "$TAN_FILE"; then
+        # TAN gefunden und korrekt
         echo "Zugriff erlaubt."
 
-        # Entfernen der verbrauchten TAN
-        sed -i '1d' "$TAN_FILE"
+        # Entfernen der verbrauchten TAN aus der TAN-Datei
+        sed -i "/$USER_TAN_HASH/d" "$TAN_FILE"
 
         # Speichern des neuen aktuellen Hashwerts
-        if [ -s "$TAN_FILE" ]; then
-            NEW_HASH=$(head -n 1 "$TAN_FILE")
-            echo "$NEW_HASH" > "$CURRENT_HASH_FILE"
-        else
-            echo "Zugriff verweigert: TAN-Liste aufgebraucht."
-            rm "$TAN_FILE"
-            rm "$CURRENT_HASH_FILE"
-        fi
+        echo "$USER_TAN_HASH" > "$CURRENT_HASH_FILE"
     else
-        echo "Zugriff verweigert: Falsche TAN."
+        echo "Zugriff verweigert: Falsche TAN oder TAN-Liste aufgebraucht."
+    fi
+
+    # Überprüfen, ob die TAN-Liste leer ist
+    if [ ! -s "$TAN_FILE" ]; then
+        echo "Zugriff verweigert: TAN-Liste aufgebraucht."
+        rm "$TAN_FILE"
+        rm "$CURRENT_HASH_FILE"
     fi
 done
