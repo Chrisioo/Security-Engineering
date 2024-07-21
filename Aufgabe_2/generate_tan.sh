@@ -11,6 +11,7 @@ NUM_TANS=$2             # Anzahl TANs = 2. Parameter
 TAN_DIR="TAN"           # Verzeichnis für TAN-Dateien
 
 # Erstellen des Verzeichnisses für die TAN-Dateien, falls es nicht existiert
+# -p: Erstellt auch übergeordnete Verzeichnisse, falls sie nicht existieren
 mkdir -p "$TAN_DIR"
 
 # Generieren eines Zufallsseeds
@@ -19,11 +20,11 @@ RANDOM_SEED=$(od -vAn -N4 -tu4 < /dev/urandom | tr -d ' ')                  # Le
                                                                             # tr -d ' ': Entfernen von Leerzeichen
 
 # Erzeugen des ersten Hashwerts
-CURRENT_HASH=$(echo -n "$RANDOM_SEED" | sha256sum | awk '{print $1}')       # Berechnen des SHA256-Hashwerts des Zufallsseeds
+CURRENT_HASH=$(echo "$RANDOM_SEED" | sha256sum | sed 's/ .*//')             # Berechnen des SHA256-Hashwerts des Zufallsseeds
 
 TAN_LIST=()                                                                 # Initialisieren einer leeren Liste für die TANs
 for (( i=0; i<$NUM_TANS; i++ )); do                                         # Schleife für die Anzahl der TANs
-    NEXT_HASH=$(echo -n "$CURRENT_HASH" | sha256sum | awk '{print $1}')     # Berechnen des nächsten SHA256-Hashwerts
+    NEXT_HASH=$(echo -n "$CURRENT_HASH" | sha256sum | sed 's/ .*//')        # Berechnen des nächsten SHA256-Hashwerts
     TAN_LIST+=("$CURRENT_HASH")                                             # Hinzufügen des aktuellen Hashwerts zur TAN-Liste
     CURRENT_HASH=$NEXT_HASH                                                 # Setzen des aktuellen Hashwerts auf den nächsten Hashwert
 done
