@@ -1,46 +1,50 @@
 #!/bin/bash
 
 # Überprüfen, ob alle benötigten Parameter angegeben wurden
-if [ "$#" -ne 2 ]; then                                                     # Check, ob Anzahl Parameter ungleich 2 ist
-    echo "Nutzung: $0 <Benutzername> <Anzahl TANs>"                         # Ausgabe der korrekten Nutzung des Skripts
-    exit 1                                                                  # Beenden des Skripts mit einem Fehlercode
+if [ "$#" -ne 2 ]; then
+    echo "Nutzung: $0 <Benutzername> <Anzahl TANs>"
+    exit 1
 fi
 
-USERNAME=$1             # Benutzername = 1. Parameter  
+USERNAME=$1             # Benutzername = 1. Parameter
 NUM_TANS=$2             # Anzahl TANs = 2. Parameter
 TAN_DIR="TAN"           # Verzeichnis für TAN-Dateien
 
 # Erstellen des Verzeichnisses für die TAN-Dateien, falls es nicht existiert
-# -p: Erstellt auch übergeordnete Verzeichnisse, falls sie nicht existieren
+# -p: Erstellt auch übergeordnete Verzeichnisse, falls notwendig
 mkdir -p "$TAN_DIR"
 
 # Generieren eines Zufallsseeds
-RANDOM_SEED=$(od -vAn -N4 -tu4 < /dev/urandom | tr -d ' ')                  # Lesen von 4 zufälligen Bytes und Umwandlung in eine Ganzzahl
-                                                                            # od -vAn -N4 -tu4 < /dev/urandom: Lesen von 4 zufälligen Bytes und Umwandlung in eine vorzeichenlose Ganzzahl 
-                                                                            # tr -d ' ': Entfernen von Leerzeichen
+# od -vAn -N4 -tu4 < /dev/urandom: Liest 4 Bytes aus /dev/urandom und gibt sie als vorzeichenlose Ganzzahl aus
+# tr -d ' ': Entfernt Leerzeichen
+RANDOM_SEED=$(od -vAn -N4 -tu4 < /dev/urandom | tr -d ' ')
 
 # Erzeugen des ersten Hashwerts
-CURRENT_HASH=$(echo "$RANDOM_SEED" | sha256sum | sed 's/ .*//')             # Berechnen des SHA256-Hashwerts des Zufallsseeds
+# sha256sum: Berechnet den SHA-256-Hashwert
+# awk '{print $1}': Gibt nur den Hashwert aus, ohne den Dateinamen
+CURRENT_HASH=$(echo "$RANDOM_SEED" | sha256sum | awk '{print $1}')
 
-TAN_LIST=()                                                                 # Initialisieren einer leeren Liste für die TANs
-for (( i=0; i<$NUM_TANS; i++ )); do                                         # Schleife für die Anzahl der TANs
-    NEXT_HASH=$(echo -n "$CURRENT_HASH" | sha256sum | sed 's/ .*//')        # Berechnen des nächsten SHA256-Hashwerts
-    TAN_LIST+=("$CURRENT_HASH")                                             # Hinzufügen des aktuellen Hashwerts zur TAN-Liste
-    CURRENT_HASH=$NEXT_HASH                                                 # Setzen des aktuellen Hashwerts auf den nächsten Hashwert
+# Anlegen einer Liste für die TANs
+TAN_LIST=()
+for (( i=0; i<$NUM_TANS; i++ )); do
+    NEXT_HASH=$(echo -n "$CURRENT_HASH" | sha256sum | awk '{print $1}')
+    TAN_LIST+=("$CURRENT_HASH")
+    CURRENT_HASH=$NEXT_HASH
 done
 
 # Umkehren der TAN-Liste
-REVERSED_TAN_LIST=($(echo "${TAN_LIST[@]}" | tac -s ' '))                   # Umkehren der Reihenfolge der TAN-Liste
+# tac -s ' ': Gibt die Eingabezeilen in umgekehrter Reihenfolge aus
+REVERSED_TAN_LIST=($(echo "${TAN_LIST[@]}" | tac -s ' '))
 
 # Speichern der TAN-Liste in der Datei
-TAN_FILE="$TAN_DIR/$USERNAME.tan"                                           # Festlegen des Dateipfads für die TAN-Datei
-for TAN in "${REVERSED_TAN_LIST[@]}"; do                                    # Schleife über jede TAN in der umgekehrten TAN-Liste
-    echo "$TAN" >> "$TAN_FILE"                                              # Anhängen der TAN an die TAN-Datei
+TAN_FILE="$TAN_DIR/$USERNAME.tan"
+for TAN in "${REVERSED_TAN_LIST[@]}"; do
+    echo "$TAN" >> "$TAN_FILE"
 done
 
 # Speichern des letzten Hashwerts (wird als erster aktueller Hashwert verwendet)
-CURRENT_HASH_FILE="$TAN_DIR/$USERNAME.hash"                                 # Festlegen des Dateipfads für die Hash-Datei
-echo "${TAN_LIST[$NUM_TANS-1]}" > "$CURRENT_HASH_FILE"                      # Speichern des letzten Hashwerts in die Hash-Datei
+CURRENT_HASH_FILE="$TAN_DIR/$USERNAME.hash"
+echo "${TAN_LIST[$NUM_TANS-1]}" > "$CURRENT_HASH_FILE"
 
 # Ausgabe einer Bestätigungsmeldung
-echo "TAN-Liste für Benutzer '$USERNAME' mit $NUM_TANS TANs generiert."     # Ausgabe einer Erfolgsmeldung
+echo "TAN-Liste für Benutzer '$USERNAME' mit $NUM_TANS TANs generiert."
