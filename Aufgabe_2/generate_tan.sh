@@ -15,6 +15,8 @@ mkdir -p "$TAN_DIR"
 
 # Generieren eines Zufallsseeds
 RANDOM_SEED=$(od -vAn -N4 -tu4 < /dev/urandom | tr -d ' ')                  # Lesen von 4 zufälligen Bytes und Umwandlung in eine Ganzzahl
+                                                                            # od -vAn -N4 -tu4 < /dev/urandom: Lesen von 4 zufälligen Bytes und Umwandlung in eine vorzeichenlose Ganzzahl 
+                                                                            # tr -d ' ': Entfernen von Leerzeichen
 
 # Erzeugen des ersten Hashwerts
 CURRENT_HASH=$(echo -n "$RANDOM_SEED" | sha256sum | awk '{print $1}')       # Berechnen des SHA256-Hashwerts des Zufallsseeds
