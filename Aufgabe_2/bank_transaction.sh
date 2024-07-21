@@ -19,6 +19,12 @@ while true; do
     echo "Bitte geben Sie Ihre TAN ein:"
     read USER_TAN
 
+    if [ ! -s "$TAN_FILE" ]; then
+        echo "Zugriff verweigert: TAN-Liste aufgebraucht."
+        rm "$TAN_FILE"
+        rm "$CURRENT_HASH_FILE"
+    fi
+
     if grep -q "$USER_TAN" "$TAN_FILE"; then
         # TAN gefunden und korrekt
         echo "Zugriff erlaubt."
@@ -33,9 +39,5 @@ while true; do
     fi
 
     # Überprüfen, ob die TAN-Liste leer ist
-    if [ ! -s "$TAN_FILE" ]; then
-        echo "Zugriff verweigert: TAN-Liste aufgebraucht."
-        rm "$TAN_FILE"
-        rm "$CURRENT_HASH_FILE"
-    fi
+    
 done
