@@ -21,7 +21,7 @@ RANDOM_SEED=$(od -vAn -N4 -tu4 < /dev/urandom | tr -d ' ')
 
 # Erzeugen des ersten Hashwerts
 # sha256sum: Berechnet den SHA-256-Hashwert
-# awk '{print $1}': Gibt nur den Hashwert aus, ohne den Dateinamen
+# awk '{print $1}': Gibt nur den Hashwert aus, da sonst noch Leerzeichen und der Dateiname ausgegeben werden
 CURRENT_HASH=$(echo "$RANDOM_SEED" | sha256sum | awk '{print $1}')
 
 # Anlegen einer Liste für die TANs
