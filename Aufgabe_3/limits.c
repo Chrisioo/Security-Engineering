@@ -25,18 +25,36 @@ void set_limits() {
 
     // Setzen der CPU-Zeitgrenze auf 1 Sekunde
     limit.rlim_cur = 1;
-    limit.rlim_max = 1;
+    limit.rlim_max = 2;
     setrlimit(RLIMIT_CPU, &limit);
 
     // Setzen der Stackgröße auf 1 KB
-    limit.rlim_cur = 1024;
-    limit.rlim_max = 1024;
+    limit.rlim_cur = 4 * 1024;
+    limit.rlim_max = 8 * 1024;
     setrlimit(RLIMIT_STACK, &limit);
 
     // Setzen der maximalen Dateigröße auf 1 KB
     limit.rlim_cur = 1024;
-    limit.rlim_max = 1024;
+    limit.rlim_max = 2048;
     setrlimit(RLIMIT_FSIZE, &limit);
+}
+
+void exceed_cpu_time() {
+    while (1) {
+        // Endlosschleife, um CPU-Zeitlimit zu überschreiten
+    }
+}
+
+void exceed_stack() {
+    exceed_stack();
+}
+
+void exceed_filesize() {
+    FILE *file = fopen("test.txt", "w");
+    while (1) {
+        fputc('a', file);
+    }
+    fclose(file);
 }
 
 int main() {
@@ -55,23 +73,18 @@ int main() {
     switch (input) {
         case 1:
             while (1) {
-                // Endlosschleife, um CPU-Zeitlimit zu überschreiten
+                exceed_cpu_time();  // Endlosschleife, um CPU-Zeitlimit zu überschreiten
             }
             break;
         case 2:
             while (1) {
-                // Speicherlimit überschreiten durch Endlosschleife, in der Speicher allokiert wird 
-                void *ptr = malloc(4096); //  Allokieren von 4 KB Speicher
+                exceed_stack(); // Rekursiver Funktionsaufruf, um Speicherlimit zu überschreiten
             }
             break;
         case 3:
-            // Überschreiten des Dateigrößenlimits durch Schreiben in eine Datei
-            FILE *file = fopen("test.txt", "w");    // Öffnen der Datei im Schreibmodus
             while (1) {
-                // Endlosschleife, um Dateigrößenlimit zu überschreiten 
-                fputc('a', file); // Schreiben in die Datei
+                exceed_filesize(); // Endlosschleife, um Dateigrößenlimit zu überschreiten
             }
-            fclose(file);   // Schließen der Datei
             break;
         default:
             printf("Ungueltige Auswahl\n");
