@@ -5,6 +5,11 @@
 #include <sys/time.h>
 #include <signal.h>
 
+/**
+ * Funktion zum Behandeln von Signalen
+ * @param signal Signal, das empfangen wurde
+ * Gibt eine Fehlermeldung aus und beendet das Programm
+ */
 void handle_signal(int signal) {
     if (signal == SIGXCPU) {
         // SIGXCPU = Makro für Signal, das gesendet wird, wenn das CPU-Zeitlimit überschritten wird
@@ -16,39 +21,54 @@ void handle_signal(int signal) {
         // SIGXFSZ = Makro für Signal, das gesendet wird, wenn das Dateigrößenlimit überschritten wird
         printf("Dateigrößenlimit überschritten\n");
     }
-    fflush(stdout);
     exit(EXIT_FAILURE);
 }
 
+/**
+ * Funktion zum Setzen der Ressourcenlimits
+ * CPU-Zeitlimit: 1 Sekunde aktuelle CPU-Zeit, 2 Sekunden maximale CPU-Zeit
+ * Stackgröße: 4 KB aktuelle Stackgröße, 8 KB maximale Stackgröße
+ * Dateigröße: 1 KB aktuelle Dateigröße, 2 KB maximale Dateigröße
+ */
 void set_limits() {
-    struct rlimit limit;
+    struct rlimit limit;                // Struktur für Ressourcenlimits
 
-    // Setzen der CPU-Zeitgrenze auf 1 Sekunde
     limit.rlim_cur = 1;
     limit.rlim_max = 2;
-    setrlimit(RLIMIT_CPU, &limit);
+    setrlimit(RLIMIT_CPU, &limit);      // RLIMIT_CPU = Makro für CPU-Zeitlimit
 
-    // Setzen der Stackgröße auf 1 KB
-    limit.rlim_cur = 4 * 1024;
-    limit.rlim_max = 8 * 1024;
-    setrlimit(RLIMIT_STACK, &limit);
+    limit.rlim_cur = 4096;
+    limit.rlim_max = 8192;
+    setrlimit(RLIMIT_STACK, &limit);    // RLIMIT_STACK = Makro für Stackgröße
 
-    // Setzen der maximalen Dateigröße auf 1 KB
     limit.rlim_cur = 1024;
     limit.rlim_max = 2048;
-    setrlimit(RLIMIT_FSIZE, &limit);
+    setrlimit(RLIMIT_FSIZE, &limit);    // RLIMIT_FSIZE = Makro für Dateigröße
 }
 
+/**
+ * Funktion zum Überschreiten des CPU-Zeitlimits
+ * Endlosschleife, um CPU-Zeitlimit zu überschreiten
+ */
 void exceed_cpu_time() {
     while (1) {
         // Endlosschleife, um CPU-Zeitlimit zu überschreiten
     }
 }
 
+/**
+ * Funktion zum Überschreiten des Speicherlimits
+ * Rekursiver Funktionsaufruf, um Speicherlimit zu überschreiten
+ */
 void exceed_stack() {
     exceed_stack();
 }
 
+/**
+ * Funktion zum Überschreiten des Dateigrößenlimits
+ * Endlosschleife, um Dateigrößenlimit zu überschreiten
+ * Schreibt 'a' in eine Datei, bis das Dateigrößenlimit überschritten wird
+ */
 void exceed_filesize() {
     FILE *file = fopen("test.txt", "w");
     while (1) {
@@ -57,6 +77,10 @@ void exceed_filesize() {
     fclose(file);
 }
 
+/**
+ * Hauptfunktion
+ * Fragt nach einer Auswahl und ruft die entsprechende Funktion auf
+ */
 int main() {
     int input;
     signal(SIGXCPU, handle_signal);
