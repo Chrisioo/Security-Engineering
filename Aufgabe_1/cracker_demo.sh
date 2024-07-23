@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#################################################
+###Demoversion mit 3 Nutzern und 3 Passwörtern###
+#################################################
+
 # User mit gehashten Passwörtern
 declare -A USERS
 USERS["Steffi.Jones"]='$1$O7v0C21Z$2FH7ib2Dxtoq6B83qTgON1'
