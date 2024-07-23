@@ -4,6 +4,7 @@
 #include <sys/resource.h>
 #include <sys/time.h>
 #include <signal.h>
+#include <string.h>
 
 /**
  * Funktion zum Behandeln von Signalen
@@ -26,9 +27,9 @@ void handle_signal(int signal) {
 
 /**
  * Funktion zum Setzen der Ressourcenlimits
- * CPU-Zeitlimit: 1 Sekunde aktuelle CPU-Zeit, 2 Sekunden maximale CPU-Zeit
- * Stackgröße: 4 KB aktuelle Stackgröße, 8 KB maximale Stackgröße
- * Dateigröße: 1 KB aktuelle Dateigröße, 2 KB maximale Dateigröße
+ * CPU-Zeitlimit: 1 Sekunde Softlimit, 2 Sekunden Hardlimit
+ * Stackgröße: 1 KB Softlimit, 2 KB Hardlimit
+ * Dateigröße: 1 KB Softlimit, 2 KB Hardlimit
  */
 void set_limits() {
     struct rlimit limit;                // Struktur für Ressourcenlimits
@@ -37,8 +38,8 @@ void set_limits() {
     limit.rlim_max = 2;
     setrlimit(RLIMIT_CPU, &limit);      // RLIMIT_CPU = Makro für CPU-Zeitlimit
 
-    limit.rlim_cur = 4096;
-    limit.rlim_max = 8192;
+    limit.rlim_cur = 1024;
+    limit.rlim_max = 2048;
     setrlimit(RLIMIT_STACK, &limit);    // RLIMIT_STACK = Makro für Stackgröße
 
     limit.rlim_cur = 1024;
@@ -70,9 +71,13 @@ void exceed_stack() {
  * Schreibt 'a' in eine Datei, bis das Dateigrößenlimit überschritten wird
  */
 void exceed_filesize() {
+    if ("filesize.txt" != NULL) {
+        printf("Alte Datei gelöscht\n");
+        remove("filesize.txt");
+    }
     FILE *file = fopen("filesize.txt", "w");
     while (1) {
-        fputc('a', file);
+        fprintf(file, "%ld\n", ftell(file));
     }
     fclose(file);
 }
