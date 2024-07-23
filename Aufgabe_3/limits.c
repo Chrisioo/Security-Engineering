@@ -70,7 +70,7 @@ void exceed_stack() {
  * Schreibt 'a' in eine Datei, bis das Dateigrößenlimit überschritten wird
  */
 void exceed_filesize() {
-    FILE *file = fopen("test.txt", "w");
+    FILE *file = fopen("filesize.txt", "w");
     while (1) {
         fputc('a', file);
     }
