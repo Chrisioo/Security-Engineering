@@ -33,7 +33,8 @@ while true; do                                                          # Endlos
         echo "Zugriff erlaubt."                                         # Ausgabe, wenn die TAN in der Hash-Datei vorhanden ist
         sed -i "/$USER_TAN/d" "$TAN_FILE"                               # Löschen der verwendeten TAN aus der TAN-Datei
 
-        echo "$USER_TAN" > "$CURRENT_HASH_FILE"                         # Schreiben der verwendeten TAN in die Datei mit dem aktuellen Hashwert
+        #echo "$USER_TAN" > "$CURRENT_HASH_FILE"                         # Schreiben der verwendeten TAN in die Datei mit dem aktuellen Hashwert
+        echo "$(head -n 1 "$TAN_FILE")" > "$CURRENT_HASH_FILE"          # Schreiben der nächsten TAN in die Datei mit dem aktuellen Hashwert
     else
         echo "Zugriff verweigert: Ungültige TAN."                       # Ausgabe, wenn die TAN ungültig ist
     fi
