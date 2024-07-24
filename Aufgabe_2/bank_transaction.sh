@@ -28,9 +28,9 @@ while true; do                                                          # Endlos
     echo "Bitte geben Sie Ihre TAN ein:"
     read USER_TAN                                                       # Einlesen der Benutzer-TAN
 
-    if grep -q "$USER_TAN" "$TAN_FILE"; then                            # Mit grep prüfen, ob die TAN in der TAN-Datei vorhanden ist
+    if grep -q "$USER_TAN" "$CURRENT_HASH_FILE"; then                   # Mit grep prüfen, ob die TAN in der Hash-Datei vorhanden ist
                                                                         # -q: Quiet-Modus, gibt keinen Output aus
-        echo "Zugriff erlaubt."                                         # Ausgabe, wenn die TAN in der TAN-Datei vorhanden ist
+        echo "Zugriff erlaubt."                                         # Ausgabe, wenn die TAN in der Hash-Datei vorhanden ist
         sed -i "/$USER_TAN/d" "$TAN_FILE"                               # Löschen der verwendeten TAN aus der TAN-Datei
 
         echo "$USER_TAN" > "$CURRENT_HASH_FILE"                         # Schreiben der verwendeten TAN in die Datei mit dem aktuellen Hashwert

@@ -27,9 +27,9 @@ CURRENT_HASH=$(echo "$RANDOM_SEED" | sha256sum | awk '{print $1}')
 # Anlegen einer Liste für die TANs
 TAN_LIST=()
 for (( i=0; i<$NUM_TANS; i++ )); do
-    NEXT_HASH=$(echo -n "$CURRENT_HASH" | sha256sum | awk '{print $1}')
-    TAN_LIST+=("$CURRENT_HASH")
-    CURRENT_HASH=$NEXT_HASH
+    NEXT_HASH=$(echo -n "$CURRENT_HASH" | sha256sum | awk '{print $1}')     # Berechnen des nächsten Hashwerts indem der aktuelle Hashwert gehasht wird
+    TAN_LIST+=("$CURRENT_HASH")                                             # Hinzufügen des aktuellen Hashwerts zur TAN-Liste
+    CURRENT_HASH=$NEXT_HASH                                                 # Aktualisieren des aktuellen Hashwerts mit dem gerade berechneten Hashwert
 done
 
 # Umkehren der TAN-Liste
