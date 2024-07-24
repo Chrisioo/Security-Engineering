@@ -1,13 +1,10 @@
 #!/bin/bash
 
-# Überprüfen, ob alle benötigten Parameter angegeben wurden
-if [ "$#" -ne 2 ]; then
-    echo "Nutzung: $0 <Benutzername> <Anzahl TANs>"
-    exit 1
-fi
+echo "Nutzername: "
+read USERNAME
+echo "Anzahl TANs: "
+read NUM_TANS
 
-USERNAME=$1             # Benutzername = 1. Parameter
-NUM_TANS=$2             # Anzahl TANs = 2. Parameter
 TAN_DIR="TAN"           # Verzeichnis für TAN-Dateien
 
 # Erstellen des Verzeichnisses für die TAN-Dateien, falls es nicht existiert
