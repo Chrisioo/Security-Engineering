@@ -21,7 +21,7 @@ while read -r word; do                                                          
         echo "Hash: $generated_hash, Wort: $word, salt: $salt ($username)"      # Ausgabe des generierten Hashes, des aktuellen Wortes und des Salts
         
         if [[ "$generated_hash" == *"$hash"* ]]; then                           # Vergleich des generierten Hashes mit dem gehashten Passwort
-            echo "Passwort für Nutzer $username: $word"                         # Wenn Passwort gefunden, Ausgabe des Nutzernamens und gefundenen Passworts
+            echo "Passwort für Nutzer $username gefunden: $word"                # Wenn Passwort gefunden, Ausgabe des Nutzernamens und gefundenen Passworts
             GEFUNDENE_PASSWOERTER["$username"]="$word"                          # Speichern des gefundenen Passworts im Array GEFUNDENE_PASSWOERTER
             unset USERS["$username"]                                            # Entfernen des Nutzers aus dem Array USERS
         fi
