@@ -30,6 +30,7 @@ void handle_signal(int signal) {
  * CPU-Zeitlimit: 1 Sekunde Softlimit, 2 Sekunden Hardlimit
  * Stackgröße: 1 KB Softlimit, 2 KB Hardlimit
  * Dateigröße: 1 KB Softlimit, 2 KB Hardlimit
+ * Methode setrlimit() setzt die Ressourcenlimits, kommt aus sys/resource.h
  */
 void set_limits() {
     struct rlimit limit;                // Struktur für Ressourcenlimits
@@ -85,6 +86,7 @@ void exceed_filesize() {
 /**
  * Hauptfunktion
  * Fragt nach einer Auswahl und ruft die entsprechende Funktion auf
+ * signal() wird aufgerufen, um die Signalbehandlung zu registrieren, kommt aus signal.h
  */
 int main() {
     int input;

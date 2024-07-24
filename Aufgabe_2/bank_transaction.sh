@@ -1,41 +1,40 @@
 #!/bin/bash
 
+# Definition des TAN-Verzeichnisses
 TAN_DIR="TAN"
 
-trap "" SIGINT SIGTERM  # Ignoriere STRG+C und SIGTERM
+# Trap zum Ignorieren von STRG+C
+trap "" SIGINT
 
-while true; do
+while true; do                                                          # Endlosschleife               
     echo "Bitte geben Sie Ihren Benutzernamen ein:"
-    read USERNAME
+    read USERNAME                                                       # Einlesen des Benutzernamens             
 
-    TAN_FILE="$TAN_DIR/$USERNAME.tan"
-    CURRENT_HASH_FILE="$TAN_DIR/$USERNAME.hash"
+    TAN_FILE="$TAN_DIR/$USERNAME.tan"                                   # Pfad zur TAN-Datei des Benutzers
+    CURRENT_HASH_FILE="$TAN_DIR/$USERNAME.hash"                         # Pfad zur Datei, die den aktuellen Hashwert speichert
 
-    if [ ! -f "$TAN_FILE" ] || [ ! -f "$CURRENT_HASH_FILE" ]; then
-        echo "Zugriff verweigert: Benutzer nicht gefunden."
-        continue
+    if [ ! -f "$TAN_FILE" ] || [ ! -f "$CURRENT_HASH_FILE" ]; then      # Prüfen, ob die TAN-Datei oder die Datei mit dem aktuellen Hashwert existieren
+        echo "Zugriff verweigert: Benutzer nicht gefunden."             # Ausgabe, wenn Benutzer nicht gefunden wurde
+        continue                                                        # Schleife von vorne starten            
     fi
 
-    if [ ! -s "$TAN_FILE" ]; then
-        echo "Zugriff verweigert: TAN-Liste aufgebraucht."
-        rm "$TAN_FILE"
-        rm "$CURRENT_HASH_FILE"
-        continue
+    if [ ! -s "$TAN_FILE" ]; then                                       # Prüfen, ob die TAN-Datei leer ist
+        echo "Zugriff verweigert: TAN-Liste aufgebraucht."              # Ausgabe, wenn die TAN-Liste aufgebraucht ist
+        rm "$TAN_FILE"                                                  # Löschen der TAN-Datei   
+        rm "$CURRENT_HASH_FILE"                                         # Löschen der Datei mit dem aktuellen Hashwert
+        continue                                                        # Schleife von vorne starten
     fi
 
     echo "Bitte geben Sie Ihre TAN ein:"
-    read USER_TAN
+    read USER_TAN                                                       # Einlesen der Benutzer-TAN
 
-    if grep -q "$USER_TAN" "$TAN_FILE"; then
-        # TAN gefunden und korrekt
-        echo "Zugriff erlaubt."
+    if grep -q "$USER_TAN" "$TAN_FILE"; then                            # Mit grep prüfen, ob die TAN in der TAN-Datei vorhanden ist
+                                                                        # -q: Quiet-Modus, gibt keinen Output aus
+        echo "Zugriff erlaubt."                                         # Ausgabe, wenn die TAN in der TAN-Datei vorhanden ist
+        sed -i "/$USER_TAN/d" "$TAN_FILE"                               # Löschen der verwendeten TAN aus der TAN-Datei
 
-        # Entfernen der verbrauchten TAN aus der TAN-Datei
-        sed -i "/$USER_TAN/d" "$TAN_FILE"
-
-        # Speichern des neuen aktuellen Hashwerts
-        echo "$USER_TAN" > "$CURRENT_HASH_FILE"
+        echo "$USER_TAN" > "$CURRENT_HASH_FILE"                         # Schreiben der verwendeten TAN in die Datei mit dem aktuellen Hashwert
     else
-        echo "Zugriff verweigert: UngÃ¼ltige TAN."
+        echo "Zugriff verweigert: Ungültige TAN."                       # Ausgabe, wenn die TAN ungültig ist
     fi
 done
