@@ -14,7 +14,7 @@ USERS["Birgit.Prinz"]='$1$7ieEwjFr$T/jwatbzqhLZNVDEfymB41'                      
 # Array zum Speichern der gefundenen Passwörter
 declare -A GEFUNDENE_PASSWOERTER
 
-while read -r word; do                                                          # Schleife über alle Wörter in words_demo.txt                                                                       
+while read word; do                                                             # Schleife über alle Wörter in words_demo.txt                                                                       
     for username in "${!USERS[@]}"; do                                          # Schleife über alle Nutzer im Array USERS
         hash="${USERS[$username]}"                                              # Extrahiert Value (gehashtes Passwort) aus dem Array USERS
         salt=$(echo $hash | cut -d'$' -f3)                                      # Extrahiert Salt aus dem gehashten Passwort -> 3. Feld getrennt durch '$'
