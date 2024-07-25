@@ -8,7 +8,6 @@ read NUM_TANS
 TAN_DIR="TAN"           # Verzeichnis für TAN-Dateien
 
 # Erstellen des Verzeichnisses für die TAN-Dateien, falls es nicht existiert
-# -p: Erstellt auch übergeordnete Verzeichnisse, falls notwendig
 mkdir -p "$TAN_DIR"
 
 # Generieren eines Zufallsseeds
