@@ -41,6 +41,8 @@ done
 # Speichern des letzten Hashwerts (wird als erster aktueller Hashwert verwendet)
 CURRENT_HASH_FILE="$TAN_DIR/$USERNAME.hash"
 echo "${TAN_LIST[$NUM_TANS-1]}" > "$CURRENT_HASH_FILE"
+# Entfernen der ersten Zeile aus der TAN-Datei
+sed -i '1d' "$TAN_FILE"
 
 # Ausgabe einer Bestätigungsmeldung
 echo "TAN-Liste für Benutzer '$USERNAME' mit $NUM_TANS TANs generiert."

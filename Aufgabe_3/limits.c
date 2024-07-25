@@ -36,14 +36,14 @@ void set_limits() {
     struct rlimit limit;                // Struktur für Ressourcenlimits
 
     limit.rlim_cur = 1;
-    limit.rlim_max = 2;
+    limit.rlim_max = 5;
     setrlimit(RLIMIT_CPU, &limit);      // RLIMIT_CPU = Makro für CPU-Zeitlimit
 
     limit.rlim_cur = 1024;
     limit.rlim_max = 2048;
     setrlimit(RLIMIT_STACK, &limit);    // RLIMIT_STACK = Makro für Stackgröße
 
-    limit.rlim_cur = 1024;
+    //limit.rlim_cur = 1024;
     limit.rlim_max = 2048;
     setrlimit(RLIMIT_FSIZE, &limit);    // RLIMIT_FSIZE = Makro für Dateigröße
 }
